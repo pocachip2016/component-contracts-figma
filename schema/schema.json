@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/nvillapiano/component-contracts-figma/schema/schema.json",
+  "title": "Component Contract",
+  "description": "Schema for a Component Contracts contract file.",
+  "type": "object",
+  "required": ["id", "version", "displayName", "tokens", "props", "states"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "type": "string", "description": "Unique component identifier. Used in CSS custom property names." },
+    "version": { "type": "string", "description": "Semver version string." },
+    "displayName": { "type": "string" },
+    "description": { "type": "string" },
+    "status": { "type": "string", "enum": ["draft", "stable", "deprecated"] },
+    "platforms": {
+      "type": "array",
+      "items": { "type": "string", "enum": ["web", "ios", "android"] }
+    },
+    "tokens": {
+      "type": "object",
+      "description": "Tier 3 token bindings. Values are Semantic token paths.",
+      "properties": {
+        "color": { "type": "object" },
+        "typography": { "type": "object" },
+        "spacing": { "type": "object" },
+        "border": { "type": "object" },
+        "motion": { "type": "object" }
+      }
+    },
+    "props": {
+      "type": "object",
+      "description": "Component props. Variant axes use type: enum.",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": { "type": "string", "enum": ["enum", "string", "boolean", "function", "ref"] },
+          "values": { "type": "array" },
+          "default": {},
+          "required": { "type": "boolean" },
+          "tokenMapped": { "type": "boolean" },
+          "description": { "type": "string" },
+          "platforms": { "type": "object" }
+        }
+      }
+    },
+    "states": {
+      "type": "array",
+      "description": "State axis values. Drive the variant matrix.",
+      "items": { "type": "string" }
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "props"],
+        "properties": {
+          "id": { "type": "string" },
+          "displayName": { "type": "string" },
+          "description": { "type": "string" },
+          "props": { "type": "object" }
+        }
+      }
+    },
+    "composition": {
+      "type": "object",
+      "properties": {
+        "slots": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "description": { "type": "string" },
+              "required": { "type": "boolean" },
+              "childOrder": { "type": "array", "items": { "type": "string" } },
+              "children": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "type": { "type": "string" },
+                    "description": { "type": "string" },
+                    "figma": {
+                      "type": "object",
+                      "description": "Figma rendering hints.",
+                      "properties": {
+                        "textProp": { "type": "string" },
+                        "booleanProp": { "type": "string" },
+                        "visible": { "type": "boolean" },
+                        "position": { "type": "string" },
+                        "sizing": { "type": "string", "enum": ["fixed"] },
+                        "width": { "type": "number" },
+                        "height": { "type": "number" },
+                        "rotateOnExpand": { "type": "boolean" },
+                        "defaultRotation": { "type": "number" },
+                        "expandedRotation": { "type": "number" },
+                        "visibleWhen": { "type": "string" },
+                        "defaultGlyph": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "forbiddenParents": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "behavior": { "type": "object" },
+    "accessibility": { "type": "object" },
+    "usage": { "type": "object" },
+    "platformNotes": { "type": "object" },
+    "changelog": { "type": "array" }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "$schema": "../../schema/schema.json",
+  "id": "accordion",
+  "version": "0.2.2",
+  "displayName": "Accordion",
+  "description": "A disclosure component. Reveals or hides content when the trigger is activated. Model as a single item — compose lists by stacking instances.",
+  "status": "draft",
+  "platforms": ["web", "ios", "android"],
+  "tokens": {
+    "color": {
+      "background.default": "neutral.0",
+      "background.hover": "neutral.50",
+      "border.default": "neutral.200",
+      "text.trigger": "neutral.900",
+      "text.content": "neutral.800",
+      "icon.trigger": "neutral.500",
+      "focus.ring": "focus.default"
+    },
+    "typography": {
+      "trigger.size": "textSize.md",
+      "trigger.weight": "weight.medium",
+      "content.size": "textSize.sm"
+    },
+    "spacing": {
+      "padding.x": "space.md",
+      "padding.y": "space.sm",
+      "gap": "space.xs"
+    },
+    "border": {
+      "radius": "radius.md",
+      "width": "border.width.sm"
+    },
+    "motion": {
+      "transition": "duration.normal",
+      "easing": "easing.ease-in-out"
+    }
+  },
+  "props": {
+    "type": {
+      "type": "enum",
+      "description": "Controls collapse behavior.",
+      "values": ["single-non-collapsible", "single-collapsible", "multiple"],
+      "default": "single-collapsible",
+      "tokenMapped": false
+    },
+    "triggerLabel": { "type": "string", "required": true },
+    "content": { "type": "string", "required": true },
+    "expanded": { "type": "boolean", "default": false },
+    "disabled": { "type": "boolean", "default": false }
+  },
+  "states": ["default", "hover", "focus", "active", "disabled"],
+  "variants": [
+    { "id": "single-non-collapsible", "props": { "type": "single-non-collapsible", "triggerLabel": "Section title", "content": "Content goes here." } },
+    { "id": "single-collapsible",     "props": { "type": "single-collapsible",     "triggerLabel": "Section title", "content": "Content goes here." } },
+    { "id": "multiple",               "props": { "type": "multiple",               "triggerLabel": "Section title", "content": "Content goes here." } }
+  ],
+  "composition": {
+    "slots": {
+      "trigger": {
+        "description": "The clickable header row.",
+        "required": true,
+        "childOrder": ["label", "chevron"],
+        "children": {
+          "label": {
+            "type": "text",
+            "figma": { "textProp": "triggerLabel" }
+          },
+          "chevron": {
+            "type": "icon",
+            "figma": {
+              "position": "trailing",
+              "defaultGlyph": "\u25be",
+              "sizing": "fixed",
+              "width": 16,
+              "height": 16,
+              "rotateOnExpand": true,
+              "defaultRotation": 0,
+              "expandedRotation": -90
+            }
+          }
+        }
+      },
+      "content": {
+        "description": "The expandable content region.",
+        "required": true,
+        "children": {
+          "content": {
+            "type": "text",
+            "figma": { "textProp": "content", "visibleWhen": "Expanded=true" }
+          }
+        }
+      }
+    }
+  },
+  "behavior": {
+    "focusable": true,
+    "pressable": true,
+    "keyboardShortcuts": [
+      { "key": "Enter", "action": "Toggle expanded state" },
+      { "key": "Space", "action": "Toggle expanded state" }
+    ]
+  },
+  "accessibility": { "role": "button", "labelSource": "prop", "wcagLevel": "AA" },
+  "usage": {
+    "do": [
+      "Model as a single item — stack instances to compose a list",
+      "Use for progressive disclosure of secondary content",
+      "Keep trigger labels short and descriptive"
+    ],
+    "dont": [
+      "Don't nest accordions more than one level deep",
+      "Don't use for primary navigation"
+    ]
+  },
+  "changelog": [
+    { "version": "0.2.2", "date": "2026-03-21", "changes": ["Added fixed square dimensions to chevron (16x16)", "Added sizing: fixed as explicit HUG exception"] },
+    { "version": "0.2.1", "date": "2026-03-21", "changes": ["Added explicit defaultRotation and expandedRotation in degrees"] },
+    { "version": "0.2.0", "date": "2026-03-21", "changes": ["Added slot composition with childOrder", "Chevron trailing with rotation hints"] },
+    { "version": "0.1.0", "date": "2026-03-20", "changes": ["Initial draft"] }
+  ]
+}
