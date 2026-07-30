@@ -142,8 +142,8 @@
             "properties": {
               "x": { "type": "number", "minimum": 0, "maximum": 1 },
               "y": { "type": "number", "minimum": 0, "maximum": 1 },
-              "w": { "type": "number", "minimum": 0, "maximum": 1 },
-              "h": { "type": "number", "minimum": 0, "maximum": 1 }
+              "w": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+              "h": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
             }
           },
           "fixedSize": { "type": "boolean", "description": "Excluded from responsive recalculation (Banner fixed-size exception precedent)" },
@@ -156,6 +156,7 @@
       "properties": {
         "text": {
           "type": "object",
+          "additionalProperties": false,
           "properties": {
             "maxLength": { "type": "integer", "minimum": 1 },
             "overflow": { "type": "string", "enum": ["shrink", "clamp", "reject"] }
