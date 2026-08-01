@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/schema.json",
   "id": "gux-horizontal-poster-title-overlay",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "displayName": "GUX 가로포스터 타이틀 오버레이 (832x468)",
   "description": "GUX 가로포스터(832x468) 배경 위에 타이틀 로고(600x160 원본, 실측 안전영역 360x160)를 합성하는 템플릿. dev-template-automation Step 0~4 실측 기반, filename-contract 방식(GUX_가로포스터_IMG/LOGO 파일명 페어링)으로 발견/검증됨.",
   "status": "draft",
@@ -44,7 +44,27 @@
       "bbox": { "x": 40, "y": 267, "w": 360, "h": 160 },
       "bboxNormalized": { "x": 0.048, "y": 0.5705, "w": 0.4327, "h": 0.3419 },
       "fixedSize": true,
-      "isRequired": true
+      "isRequired": true,
+      "x-damRefs": [
+        {
+          "guide_id": 27,
+          "canvas_w": 832,
+          "canvas_h": 468,
+          "slot_uid": "8a3989e5d3a873f4",
+          "alias": "동그라미라벨_가이드",
+          "source_psd_path": "/mnt/d/dam_data/realm/01. olleh tv 운영디자인 가이드/TV/@[TV]템플릿 및 최신 가이드/GUX/00_가로포스터+상세/240614_[GUX]가로포스터_동그라이라벨_가이드/[GUX_가로포스터_IMG]832x468_동그라미라벨_가이드.psd",
+          "layer_path": "가이드영역/1단 이상/가이드 영역/샘플_이미지 가이드 영역(2)"
+        },
+        {
+          "guide_id": 27,
+          "canvas_w": 832,
+          "canvas_h": 468,
+          "slot_uid": "09498cbe0b0c8971",
+          "alias": "지니TV가이드_메타와 세트",
+          "source_psd_path": "/mnt/d/dam_data/realm/01. olleh tv 운영디자인 가이드/TV/@[TV]템플릿 및 최신 가이드/GUX/00_가로포스터+상세/230811_[GUX]가로포스터_지니TV가이드_메타와 세트/[GUX_가로포스터_IMG]832x468_지니TV가이드영상포스터_16건_윤가영_230811.psd",
+          "layer_path": "가로 형 포스터/가이드영역/1단 이상/가이드 영역/샘플_이미지 가이드 영역(2)"
+        }
+      ]
     }
   ],
   "constraints": {
@@ -61,6 +81,11 @@
     "outputFormats": ["jpg"]
   },
   "x-dam": {
+    "uidRuleVersion": "uid-v1",
+    "damCombo": [
+      { "guide_id": 27, "canvas_w": 832, "canvas_h": 468 },
+      { "guide_id": 27, "canvas_w": 600, "canvas_h": 160 }
+    ],
     "assetQuery": {
       "method": "filename-contract-title-key",
       "backdrop": { "facet": "GUX_가로포스터_IMG", "resolution": "832x468", "ext": "jpg" },
@@ -76,7 +101,9 @@
   },
   "usage": {
     "do": [],
-    "dont": ["UHD/수어 배지 variant를 이 계약으로 처리하지 말 것 — v0.2.0에서 별도 검증 후 확장 예정"]
+    "dont": [
+      "UHD/수어 배지 variant를 이 계약으로 처리하지 말 것 — VD.3(axis-v1)로 재검증했으나 guide 27의 두 콤보(600x160/832x468) 모두 variant 클래스 슬롯이 0건이라 축 증거가 없다. v0.2.0에서도 보류, 별도 PSD 샘플 확보 전까지 계속 유예"
+    ]
   },
   "changelog": [
     {
@@ -84,6 +111,17 @@
       "date": "2026-07-30",
       "changes": [
         "dev-template-automation Step 6 초안 — backdrop/title_overlay 슬롯만 정의, 배지(UHD/수어) 제외"
+      ]
+    },
+    {
+      "version": "0.2.0",
+      "date": "2026-08-01",
+      "changes": [
+        "VD.4 — title_overlay 슬롯에 x-damRefs(canonical 위치 + PSD 출처별 alias 2건) 추가. 동일 위치(bbox 공통)에 서로 다른 PSD 출처(동그라미라벨_가이드/지니TV가이드_메타와 세트)의 slot_uid가 각각 존재해 alias로 보존, 병합하지 않음",
+        "x-dam.uidRuleVersion=uid-v1 스탬프, x-dam.damCombo로 이 계약이 참조하는 두 콤보(832x468, 600x160) 명시",
+        "backdrop 슬롯은 guide_slots에 대응 행이 없는 베이스 캔버스라 damRef 미부여",
+        "VD.3(axis-v1) 재검증 결과 이 콤보엔 variant 슬롯 증거 없음 확인 — props/variants 변경 없음(UHD/수어 배지 확장은 계속 보류)",
+        "참고: title_overlay.bbox(360x160)는 v0.1.0 Step3/4 원측정값을 그대로 유지함(VD.4 방침상 변경 금지). VD.1이 재계산한 x_norm/y_norm/w_norm/h_norm 기준 픽셀 환산값은 363x163으로 약 3px 드리프트가 있으나, 서로 다른 측정 파이프라인 산출물 간 반올림 차이로 판단해 원본 bbox를 보존함"
       ]
     }
   ]

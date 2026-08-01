@@ -1,0 +1,89 @@
+{
+  "$schema": "../../schema/schema.json",
+  "id": "gux-home-bigbanner-safe-area-variant",
+  "version": "0.1.0",
+  "displayName": "GUX 첫화면빅배너 안전영역(safe_area) variant axis proof (1920x900)",
+  "description": "dev-figma-variant-design VD.3(axis-v1)이 guide 29(01_첫화면빅배너_고도화배너, 1920x900)에서 실측으로 확인한 유일한 variant 축(safe_area 슬롯 2건)만 모델링한 축 증명 계약이다. 이 콤보의 나머지 common 슬롯 40개는 의미(role/kind)가 아직 확정되지 않아 이번 범위에서 제외했다 — 완성된 첫화면빅배너 컴포넌트 스펙이 아니라, VD.4가 v0.2.0으로 확장하기 전 축 증거만 선반영한 중간 산출물이다.",
+  "status": "draft",
+  "platforms": ["web"],
+  "tokens": {},
+  "props": {
+    "safeAreaVariant": {
+      "type": "enum",
+      "values": ["variant_a", "variant_b"],
+      "default": "variant_a",
+      "required": true,
+      "tokenMapped": false,
+      "description": "axis-v1(VD.3)이 판정한 안전영역(safe_area) variant 축. 두 값 그룹의 PSD 파일명이 정형화되어 있지 않아 axis_name_source=generated로 폴백됨 — 상세는 plans/dev-figma-variant-design/artifacts/vd3_variant_axes.json 참조."
+    }
+  },
+  "states": ["default"],
+  "variants": [
+    { "id": "variant_a", "displayName": "안전영역 variant A (UHD 우측쏠림방지 가이드)", "props": { "safeAreaVariant": "variant_a" } },
+    { "id": "variant_b", "displayName": "안전영역 variant B (TV오리지널 요일추가 가이드)", "props": { "safeAreaVariant": "variant_b" } }
+  ],
+  "slots": [
+    {
+      "id": "safe_area_variant_a",
+      "role": "safe_area",
+      "description": "렌더링 콘텐츠 슬롯이 아니라 axis-v1이 판정한 안전영역 경계 마커. safeAreaVariant=variant_a일 때 유효.",
+      "bbox": { "x": 599, "y": 218, "w": 1002, "h": 504 },
+      "bboxNormalized": { "x": 0.312, "y": 0.2422, "w": 0.5219, "h": 0.56 },
+      "fixedSize": true,
+      "isRequired": false,
+      "x-dam": {
+        "guide_id": 29,
+        "canvas_w": 1920,
+        "canvas_h": 900,
+        "slot_uid": "ca5927297fca85d1",
+        "source_psd_path": "/mnt/d/dam_data/realm/01. olleh tv 운영디자인 가이드/TV/@[TV]템플릿 및 최신 가이드/GUX/01_첫화면빅배너_고도화배너/250612_[GUX]첫화면빅배너_UHD우측 쏠림 방지 가이드/[GUX_첫화면빅배너_IMG]1980x900_우측쏠림방지_가이드_250612.psd",
+        "layer_path": "VOD 빅배너/가이드 영역/가이드 영역/주요 오브젝트 가이드 영역 copy"
+      }
+    },
+    {
+      "id": "safe_area_variant_b",
+      "role": "safe_area",
+      "description": "렌더링 콘텐츠 슬롯이 아니라 axis-v1이 판정한 안전영역 경계 마커. safeAreaVariant=variant_b일 때 유효. 원본 정규화 bbox(x=-0.0005, y=-0.0011, w=1.001, h=1.2022)가 캔버스 경계를 미세하게 벗어나(측정 노이즈) 0-1/캔버스 범위로 클램프함 — 사실상 전체 캔버스를 덮는 안전영역.",
+      "bbox": { "x": 0, "y": 0, "w": 1920, "h": 900 },
+      "fixedSize": true,
+      "isRequired": false,
+      "x-dam": {
+        "guide_id": 29,
+        "canvas_w": 1920,
+        "canvas_h": 900,
+        "slot_uid": "0825897ece9bddc4",
+        "source_psd_path": "/mnt/d/dam_data/realm/01. olleh tv 운영디자인 가이드/TV/@[TV]템플릿 및 최신 가이드/GUX/01_첫화면빅배너_고도화배너/250717_[GUX]첫화면빅배너_TV오리지널_한눈에모아보는이번주인기방영작_요일추가/1_PSD/[GUX_첫화면빅배너_IMG]1980x900_한눈에모아보는이번주인기방영작(금~일)_요일추가_지혜경_250718.psd",
+        "layer_path": "VOD 빅배너/가이드 영역/안전 영역",
+        "normalizedRaw": { "x": -0.0005, "y": -0.0011, "w": 1.001, "h": 1.2022, "note": "clamped to [0,1]/canvas bounds for schema validity, see description" }
+      }
+    }
+  ],
+  "rendering": {
+    "baseCanvas": { "width": 1920, "height": 900 },
+    "outputFormats": ["jpg"]
+  },
+  "x-dam": {
+    "uidRuleVersion": "uid-v1",
+    "damCombo": [{ "guide_id": 29, "canvas_w": 1920, "canvas_h": 900 }],
+    "scopeNote": "VD.3에서 확인된 variant-axis evidence 슬롯(safe_area 2건)만 모델링. common 슬롯 40개는 role/kind 의미 확정 전이라 제외했다 — 제외 목록은 combo의 전체 slot_id 대비 이 계약의 slots.x-dam.slot_uid 차집합으로 plans/dev-figma-variant-design/artifacts/vd1_combo_inventory.json(guide_id=29, canvas 1920x900)에서 재구성 가능.",
+    "excludedSlotCount": 40,
+    "provenance": {
+      "steps": ["plans/dev-figma-variant-design/artifacts/vd1_combo_inventory.json", "plans/dev-figma-variant-design/artifacts/vd3_variant_axes.json"]
+    }
+  },
+  "usage": {
+    "do": [],
+    "dont": [
+      "이 계약을 완성된 첫화면빅배너 컴포넌트로 취급하지 말 것 — safe_area variant 축 증명 전용이며 배경/타이틀/기타 콘텐츠 슬롯은 미정의 상태다"
+    ]
+  },
+  "changelog": [
+    {
+      "version": "0.1.0",
+      "date": "2026-08-01",
+      "changes": [
+        "VD.4 — axis-v1(VD.3)이 guide 29(1920x900)에서 확인한 safe_area variant 축(2값)만 모델링한 axis proof 초안"
+      ]
+    }
+  ]
+}
