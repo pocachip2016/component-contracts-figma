@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/schema.json",
   "id": "gux-horizontal-poster-title-overlay",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "displayName": "GUX 가로포스터 타이틀 오버레이 (832x468)",
   "description": "GUX 가로포스터(832x468) 배경 위에 타이틀 로고(600x160 원본, 실측 안전영역 360x160)를 합성하는 템플릿. dev-template-automation Step 0~4 실측 기반, filename-contract 방식(GUX_가로포스터_IMG/LOGO 파일명 페어링)으로 발견/검증됨.",
   "status": "draft",
@@ -102,7 +102,7 @@
   "usage": {
     "do": [],
     "dont": [
-      "UHD/수어 배지 variant를 이 계약으로 처리하지 말 것 — VD.3(axis-v1)로 재검증했으나 guide 27의 두 콤보(600x160/832x468) 모두 variant 클래스 슬롯이 0건이라 축 증거가 없다. v0.2.0에서도 보류, 별도 PSD 샘플 확보 전까지 계속 유예"
+      "UHD/수어 배지 variant를 이 계약(title_overlay 슬롯)에 얹지 말 것 — VD.7(2026-08-05) 재검증으로 sign/uhd 축은 GO 판정됐으나, 배지 x 위치가 로고 길이에 따라 가변이라 이 계약의 고정 360px 안전영역 크롭과 구조적으로 충돌한다. 배지는 sibling 계약 gux-horizontal-poster-badge-slot에서 별도로 다룬다"
     ]
   },
   "changelog": [
@@ -122,6 +122,13 @@
         "backdrop 슬롯은 guide_slots에 대응 행이 없는 베이스 캔버스라 damRef 미부여",
         "VD.3(axis-v1) 재검증 결과 이 콤보엔 variant 슬롯 증거 없음 확인 — props/variants 변경 없음(UHD/수어 배지 확장은 계속 보류)",
         "참고: title_overlay.bbox(360x160)는 v0.1.0 Step3/4 원측정값을 그대로 유지함(VD.4 방침상 변경 금지). VD.1이 재계산한 x_norm/y_norm/w_norm/h_norm 기준 픽셀 환산값은 363x163으로 약 3px 드리프트가 있으나, 서로 다른 측정 파이프라인 산출물 간 반올림 차이로 판단해 원본 bbox를 보존함"
+      ]
+    },
+    {
+      "version": "0.3.0",
+      "date": "2026-08-05",
+      "changes": [
+        "VD.7 — UHD/수어 배지 재검증 결과 sign/uhd 축 GO(combined/uhdSign은 NO-GO)로 확정됐으나, 배지를 이 계약의 title_overlay 슬롯에 편입하지 않고 신규 sibling 계약 gux-horizontal-poster-badge-slot(v0.1.0)으로 분리 — 배지 x 위치가 로고 길이에 종속적으로 이동해 이 계약의 고정 360px 안전영역 크롭과 충돌하기 때문. usage.dont의 배지 유예 문구를 '증거 없음'에서 'sibling 계약 참조'로 갱신, backdrop/title_overlay 슬롯 자체는 변경 없음"
       ]
     }
   ]
