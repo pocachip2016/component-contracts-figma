@@ -1,7 +1,7 @@
 {
   "$schema": "../../schema/schema.json",
   "id": "gux-home-bigbanner-tv-original-top3",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "GUX 첫화면빅배너 TV오리지널 고정 3패널(1920x900)",
   "description": "This contract models a fixed three-panel TV Original top-3 layout observed in two production PSDs. It does not claim support for dynamic N-slide carousel behavior. dev-gux-folder-componentization G.4 F1~F2 실측 기반. 01_첫화면빅배너_고도화배너(guide_id=29, 1920x900) 5개 하위폴더 중 TV오리지널_요일추가 폴더((금~일)/(월~목) 2개 IMG PSD)만의 scope다 — page가이드/UHD쏠림방지 폴더(단일 인스턴스, 3패널 구조 없음)는 이 계약의 근거가 아니다.",
   "status": "draft",
@@ -32,6 +32,27 @@
       "type": "string",
       "required": true,
       "description": "패널 3 요일 배지 텍스트 (e.g. \"일\", \"목\")"
+    },
+    "dayBadge1Variant": {
+      "type": "enum",
+      "values": ["weekend", "weekday"],
+      "required": true,
+      "tokenMapped": true,
+      "description": "패널 1 day_badge pill의 그라데이션 chrome variant. v0.1.1 F4 착수 시 composite 렌더링 재실측으로 확인된 실제 축 — 금토일 PSD 패널은 weekend(teal 그라데이션), 월화수목 PSD 패널은 weekday(red 그라데이션)를 쓴다. 두 그룹이 서로 다른 원본 PSD 파일에서 오며 기본값을 둘 근거가 없어 default 없이 required로 명시, 호출부가 실제 요일 그룹에 맞는 값을 항상 지정하게 한다."
+    },
+    "dayBadge2Variant": {
+      "type": "enum",
+      "values": ["weekend", "weekday"],
+      "required": true,
+      "tokenMapped": true,
+      "description": "패널 2 day_badge pill variant. dayBadge1Variant와 동일 규칙."
+    },
+    "dayBadge3Variant": {
+      "type": "enum",
+      "values": ["weekend", "weekday"],
+      "required": true,
+      "tokenMapped": true,
+      "description": "패널 3 day_badge pill variant. dayBadge1Variant와 동일 규칙."
     }
   },
   "states": ["default"],
@@ -161,7 +182,35 @@
         "status": "not_adopted",
         "reason": "own-flag visible=true였으나 ancestor-aware visible_effective=false로 확정(상위 가이드 영역 그룹 자체가 숨김) — 실제로는 렌더링되지 않는 guide marker. superseded contract: gux-home-bigbanner-safe-area-variant.contract.json(v0.1.1, status=deprecated)"
       }
-    ]
+    ],
+    "dayBadgeChromeEvidence": {
+      "note": "v0.1.1 F4 착수 직전 발견 — day_badge_1/2/3 슬롯은 원래 텍스트 콘텐츠만 담당하고 pill/아이콘 chrome은 F4에서 컴포넌트가 직접 렌더하기로 했으나, chrome 색상이 실제로는 요일 그룹(원본 PSD 파일)에 따라 2값으로 갈리는 축임이 재실측으로 드러났다. 원시 gradient/stroke descriptor(VECTOR_STROKE_CONTENT_DATA 등) 수치 해석은 blend mode 미반영으로 신뢰할 수 없어(최초 시도에서 실제와 다른 색상 추정) psd_tools의 layer_group.composite() RGBA 렌더링을 ground truth로 채택, 픽셀 샘플링으로 아래 값을 확정했다.",
+      "variantAssignment": {
+        "weekend": "source_psd_path에 '(금~일)' 포함 파일의 모든 day_badge — 팬널 1/2/3 공통",
+        "weekday": "source_psd_path에 '(월~목)' 포함 파일의 모든 day_badge — 팬널 1/2/3 공통"
+      },
+      "measured": {
+        "pillRadius": { "value": 23, "unit": "px", "source": "shape_layer.origination[0].radii, 4개 코너 동일" },
+        "pillGradient": {
+          "start": { "approxRgba": "rgba(0,0,0,0.62~0.66)", "note": "좌측 edge 샘플 다건 평균 근사치, 정확한 stop offset은 미상" },
+          "weekendEnd": { "approxRgb": "rgb(0,178,178)", "note": "composite 렌더링 우측 edge 픽셀 샘플" },
+          "weekdayEnd": { "approxRgb": "rgb(203,65,65)", "note": "composite 렌더링 우측 edge 픽셀 샘플" }
+        },
+        "checkIcon": {
+          "sizePx": { "w": 22, "h": 22 },
+          "offsetFromPillTopLeftPx": { "x": 15, "y": 15 },
+          "backgroundApproxRgba": "rgba(255,95,95,0.73)",
+          "glyphColor": "white",
+          "note": "weekend/weekday 두 파일 6개 인스턴스 전부 동일 — variant 축이 아니라 고정 chrome"
+        },
+        "text": {
+          "colorApproxRgb": "rgb(255,208,209)",
+          "fontSizeApproxPx": 20,
+          "fontSizeCaveat": "derived/approx from rendered bbox — PSD 엔진 내부 FontSize(48.9)를 px로 직접 환산할 신뢰 가능한 경로를 찾지 못해, 래스터 glyph bbox 높이(슬라이드별 21~25px) 기반 근사치를 사용. 재실측 시 우선 재검증 대상."
+        }
+      },
+      "evidenceArtifacts": "이번 재실측용 composite PNG 크롭(day_badge_*.png, check_icon_*.png)은 scratchpad 산출물이며 저장소에 커밋되지 않음 — 수치 자체가 evidence이며 필요 시 동일 PSD/스크립트로 재현 가능"
+    }
   },
   "usage": {
     "do": [
@@ -182,6 +231,16 @@
         "G.4 F1~F2 — TV오리지널_요일추가 폴더(guide_id=29, 1920x900) 고정 3패널 계약 초안. backdrop(0,0,1920,900) + day_badge_1/2/3(x만 상이, w/h 132x51 동일) 슬롯 정의.",
         "broadcaster_logo는 표본 부족으로 HOLD(slot 미채택, evidence만 x-dam.excludedCandidates에 기록).",
         "safe_area_variant_a/b는 ancestor-aware visible_effective 재실측 결과 렌더링되지 않는 guide marker로 확정되어 미채택 — 기존 draft contract(gux-home-bigbanner-safe-area-variant)는 deprecated 처리."
+      ]
+    },
+    {
+      "version": "0.1.1",
+      "date": "2026-08-06",
+      "changes": [
+        "F4(React 구현) 착수 중 day_badge pill chrome(그라데이션 색상)이 슬롯 실측 당시 bbox만 다뤄 미모델링 상태였음을 발견 — composite() 렌더링 재실측 결과 요일 그룹(원본 PSD 파일)에 따라 실제 2값 색상 축(weekend=teal, weekday=red)이 존재함을 확인.",
+        "dayBadge1Variant/dayBadge2Variant/dayBadge3Variant prop 추가(enum weekend|weekday, required, default 없음) — 두 그룹이 서로 다른 PSD 파일에서 오므로 계약 레벨에서 명시적 지정을 강제.",
+        "x-dam.dayBadgeChromeEvidence 신설: pillRadius(23px), 2종 gradient 근사 색상, 고정 check icon(22x22, offset 15,15, 두 variant 공통) 실측값 기록.",
+        "text 색상/사이즈 실측값도 함께 기록 — fontSizeApproxPx(20)는 PSD 엔진 FontSize를 직접 환산하지 못해 raster bbox 기반 근사치임을 fontSizeCaveat에 명시(derived/approx from rendered bbox), 재실측 시 최우선 재검증 대상으로 표시."
       ]
     }
   ]
