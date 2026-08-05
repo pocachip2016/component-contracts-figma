@@ -1,10 +1,10 @@
 {
   "$schema": "../../schema/schema.json",
   "id": "gux-home-bigbanner-safe-area-variant",
-  "version": "0.1.0",
-  "displayName": "GUX 첫화면빅배너 안전영역(safe_area) variant axis proof (1920x900)",
-  "description": "dev-figma-variant-design VD.3(axis-v1)이 guide 29(01_첫화면빅배너_고도화배너, 1920x900)에서 실측으로 확인한 유일한 variant 축(safe_area 슬롯 2건)만 모델링한 축 증명 계약이다. 이 콤보의 나머지 common 슬롯 40개는 의미(role/kind)가 아직 확정되지 않아 이번 범위에서 제외했다 — 완성된 첫화면빅배너 컴포넌트 스펙이 아니라, VD.4가 v0.2.0으로 확장하기 전 축 증거만 선반영한 중간 산출물이다.",
-  "status": "draft",
+  "version": "0.1.1",
+  "displayName": "GUX 첫화면빅배너 안전영역(safe_area) variant axis proof (1920x900) — DEPRECATED",
+  "description": "dev-figma-variant-design VD.3(axis-v1)이 guide 29(01_첫화면빅배너_고도화배너, 1920x900)에서 실측으로 확인한 유일한 variant 축(safe_area 슬롯 2건)만 모델링한 축 증명 계약이다. 이 콤보의 나머지 common 슬롯 40개는 의미(role/kind)가 아직 확정되지 않아 이번 범위에서 제외했다 — 완성된 첫화면빅배너 컴포넌트 스펙이 아니라, VD.4가 v0.2.0으로 확장하기 전 축 증거만 선반영한 중간 산출물이다. [DEPRECATED 2026-08-05] dev-gux-folder-componentization G.4-F2가 ancestor-aware visible_effective로 재실측한 결과 두 slot 모두 실제로는 렌더링되지 않는 것으로 확정됐다(가이드 문서용 안전영역/UHD 크롭 주석 마커였음). 상세: plans/dev-gux-folder-componentization/artifacts/g4_f2_verdict.md.",
+  "status": "deprecated",
   "platforms": ["web"],
   "tokens": {},
   "props": {
@@ -74,7 +74,8 @@
   "usage": {
     "do": [],
     "dont": [
-      "이 계약을 완성된 첫화면빅배너 컴포넌트로 취급하지 말 것 — safe_area variant 축 증명 전용이며 배경/타이틀/기타 콘텐츠 슬롯은 미정의 상태다"
+      "이 계약을 완성된 첫화면빅배너 컴포넌트로 취급하지 말 것 — safe_area variant 축 증명 전용이며 배경/타이틀/기타 콘텐츠 슬롯은 미정의 상태다",
+      "이 계약을 실사용 slot 근거로 재인용하지 말 것 — G.4-F2 실측(visible_effective) 결과 safe_area_variant_a/b 둘 다 렌더링되지 않는 guide marker only임이 확정됐다(production slot 아님). 후속 첫화면빅배너 계약(gux-home-bigbanner-tv-original-top3)은 이 두 slot을 채택하지 않는다."
     ]
   },
   "changelog": [
@@ -83,6 +84,13 @@
       "date": "2026-08-01",
       "changes": [
         "VD.4 — axis-v1(VD.3)이 guide 29(1920x900)에서 확인한 safe_area variant 축(2값)만 모델링한 axis proof 초안"
+      ]
+    },
+    {
+      "version": "0.1.1",
+      "date": "2026-08-05",
+      "changes": [
+        "G.4-F2 ancestor-aware visible_effective 재실측 결과에 따라 status를 draft → deprecated로 변경. 두 slot 모두 렌더링되지 않는 guide marker로 확정, usage.dont에 재인용 금지 명시."
       ]
     }
   ]
