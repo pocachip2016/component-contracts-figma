@@ -1,10 +1,10 @@
 {
   "$schema": "../../schema/schema.json",
   "id": "gux-promotion-content-type-b-x2",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "GUX 프로모션 콘텐츠유형 B유형x2 (864x528)",
   "description": "GUX 프로모션(864x528, guide_id 30, layout=B유형x2) 배경 위에 로고+타이틀 텍스트를 합성하는 템플릿. dev-gux-folder-componentization G.3 F1~F2 실측 기반. A유형X1(416x528)/C유형X4(1760x528)는 같은 폴더 그룹의 다른 캔버스 변형이며 이 계약의 scope 밖.",
-  "status": "draft",
+  "status": "approved",
   "platforms": ["web"],
   "tokens": {},
   "props": {
@@ -73,9 +73,16 @@
       "steps": ["G.1a foldername-axis-parser", "G.3 F1 axis candidates", "G.3 F2 psd 실측(9표본)"]
     }
   },
+  "constraints": {
+    "text": {
+      "maxLength": 22,
+      "overflow": "reject",
+      "rationale": "filename-based 카피 길이 분포 (n=759, p50=12, p90=22, max=79) 기반. DAM 프로덕션 자산 [GUX_프로모션_X2]864x528_... 파일명에서 제목 정규화 후 한글 음절 수 측정. horizontal-poster Step4와 동일 방법론. 2026-08-06 실측 완료."
+    }
+  },
   "usage": {
     "do": [
-      "F4 착수 전 constraints.text(maxLength/overflow)를 확정할 카피 길이 표본 실측을 별도로 수행할 것 — horizontal-poster Step4와 동급 작업이 이 계약엔 아직 없음. 그 전까지 constraints.text는 의도적으로 비워둠(매직 넘버 금지)"
+      "title_overlay.kind가 image이므로(사전 합성된 raster 자산) constraints.text는 실시간 텍스트 레이아웃 제약이 아니라 자산 매칭/QA 시점의 카피 길이 참고 지표다. 컴포넌트 코드에 런타임 검증 로직을 넣지 않는다(horizontal-poster 동일 전례, step6.md §6-2 참조)."
     ],
     "dont": [
       "text_lines(1줄/2줄)를 variant prop으로 추가하지 말 것 — legacy schema(2023-01~06)에만 형제 그룹으로 존재했고 current schema(2023-11~)는 단일 컨테이너로 통합됨. 텍스트 줄 수는 컨테이너 내부 자동 줄바꿈으로 처리(F2 evidence 참고)",
@@ -85,6 +92,16 @@
     ]
   },
   "changelog": [
+    {
+      "version": "0.1.1",
+      "date": "2026-08-06",
+      "changes": [
+        "G.8 promotion-constraints-discovery — constraints.text.maxLength/overflow 실측 완료. 근거: DAM 프로덕션 자산 759건 filename-based 카피 길이 분포 (p90=22).",
+        "maxLength=22 (단일 값, 정책 GO. horizontal-poster Step4 방법론 동일).",
+        "overflow='reject' (QA 참고 지표만, 컴포넌트 런타임 로직 아님. title_overlay.kind='image'라 사전 합성 raster; horizontal-poster 동일 전례).",
+        "usage.do 정정: F4 착수 단계의 오해 소지 표현('렌더 제외') 제거, 정책의 실제 의미(QA 참고 지표) 명확화."
+      ]
+    },
     {
       "version": "0.1.0",
       "date": "2026-08-05",
