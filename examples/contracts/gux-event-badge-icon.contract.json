@@ -1,0 +1,229 @@
+{
+  "$schema": "../../schema/schema.json",
+  "id": "gux-event-badge-icon",
+  "version": "0.1.0",
+  "displayName": "GUX 이벤트 배지 아이콘",
+  "status": "draft",
+  "tokens": {},
+  "props": {
+    "badge_type": {
+      "type": "enum",
+      "values": [
+        "reservation_coupon",
+        "limited_period",
+        "discount_rate"
+      ],
+      "default": "reservation_coupon",
+      "required": false,
+      "description": "badge_text 소스 레이어를 사람이 그룹핑한 배지 타입 축 (BCN.4 프로토타입)"
+    }
+  },
+  "states": [
+    "default"
+  ],
+  "variants": [
+    {
+      "id": "reservation_coupon",
+      "displayName": "예약구매 쿠폰증정",
+      "description": "예약구매시, TV쿠폰 4,900원 증정, 예약구매 시 쿠폰 증정1, 예약구매 시 쿠폰 증정2, 예약구매시, TV쿠폰 4,900원 증정",
+      "props": {
+        "badge_type": "reservation_coupon"
+      }
+    },
+    {
+      "id": "limited_period",
+      "displayName": "기간한정",
+      "description": "기간 한정",
+      "props": {
+        "badge_type": "limited_period"
+      }
+    },
+    {
+      "id": "discount_rate",
+      "displayName": "할인율 배지 (미문서화)",
+      "description": "% 할인, 20",
+      "props": {
+        "badge_type": "discount_rate"
+      }
+    }
+  ],
+  "slots": [
+    {
+      "id": "background",
+      "role": "background",
+      "kind": "image",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 416,
+        "h": 234
+      },
+      "isRequired": false
+    },
+    {
+      "id": "poster_image",
+      "role": "poster_image",
+      "kind": "image",
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 416,
+        "h": 234
+      },
+      "isRequired": false
+    },
+    {
+      "id": "image_guide_area",
+      "role": "image_guide_area",
+      "kind": "image",
+      "bbox": {
+        "x": 218,
+        "y": 64,
+        "w": 199,
+        "h": 106
+      },
+      "isRequired": false
+    },
+    {
+      "id": "info_guide_area",
+      "role": "info_guide_area",
+      "kind": "text",
+      "bbox": {
+        "x": 268,
+        "y": 64,
+        "w": 149,
+        "h": 70
+      },
+      "isRequired": false
+    },
+    {
+      "id": "badge_area",
+      "role": "badge_area",
+      "kind": "text",
+      "bbox": {
+        "x": 278,
+        "y": 73,
+        "w": 129,
+        "h": 53
+      },
+      "isRequired": false
+    }
+  ],
+  "rendering": {
+    "baseCanvas": {
+      "width": 416,
+      "height": 234
+    }
+  },
+  "description": "BCN(dev-badge-contract-normalization) 정규화 결과. GUX 이벤트 배지 아이콘(416x234) PSD 추출 raw-extraction을 tool/index.html 프로토타입으로 정규화. badge_type 3종(예약구매 쿠폰증정/기간한정/할인율 배지)은 badge_text 9개 소스 레이어를 사람이 수동 그룹핑한 결과. '할인율 배지'(% 할인/20)는 기존 문서화된 2종 어디에도 이름이 매칭되지 않아 BCN.4에서 미분류로 시작해 사용자 확인(2026-08-12) 후 3번째 타입으로 확정 — 원본 PSD 미확인 상태이므로 실제 명칭/의미는 후속 확인 필요.",
+  "x-dam": {
+    "provenance": {
+      "rawSourceOriginalPath": "C:\\Users\\ktalpha\\Downloads\\gux-event-badge-icon.contract.json",
+      "rawSourceRepoPath": "examples/raw-extractions/gux-event-badge-icon.contract.raw.json",
+      "legacyBadgeTypes": [
+        {
+          "groupId": "reservation_coupon",
+          "displayName": "예약구매 쿠폰증정",
+          "deprecated": false,
+          "sourceLayers": [
+            {
+              "name": "예약구매시",
+              "bbox": {
+                "x": 338,
+                "y": 73,
+                "width": 67,
+                "height": 14
+              }
+            },
+            {
+              "name": "TV쿠폰 4,900원 증정",
+              "bbox": {
+                "x": 278,
+                "y": 103,
+                "width": 129,
+                "height": 15
+              }
+            },
+            {
+              "name": "예약구매 시 쿠폰 증정1",
+              "bbox": {
+                "x": 315,
+                "y": 76,
+                "width": 90,
+                "height": 45
+              }
+            },
+            {
+              "name": "예약구매 시 쿠폰 증정2",
+              "bbox": {
+                "x": 321,
+                "y": 78,
+                "width": 84,
+                "height": 42
+              }
+            },
+            {
+              "name": "예약구매시",
+              "bbox": {
+                "x": 329,
+                "y": 81,
+                "width": 78,
+                "height": 16
+              }
+            },
+            {
+              "name": "TV쿠폰 4,900원 증정",
+              "bbox": {
+                "x": 301,
+                "y": 90,
+                "width": 104,
+                "height": 36
+              }
+            }
+          ]
+        },
+        {
+          "groupId": "limited_period",
+          "displayName": "기간한정",
+          "deprecated": false,
+          "sourceLayers": [
+            {
+              "name": "기간 한정",
+              "bbox": {
+                "x": 351,
+                "y": 80,
+                "width": 54,
+                "height": 14
+              }
+            }
+          ]
+        },
+        {
+          "groupId": "discount_rate",
+          "displayName": "할인율 배지 (미문서화)",
+          "deprecated": false,
+          "sourceLayers": [
+            {
+              "name": "% 할인",
+              "bbox": {
+                "x": 345,
+                "y": 98,
+                "width": 60,
+                "height": 20
+              }
+            },
+            {
+              "name": "20",
+              "bbox": {
+                "x": 285,
+                "y": 79,
+                "width": 56,
+                "height": 39
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
