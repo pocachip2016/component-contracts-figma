@@ -147,7 +147,13 @@
             }
           },
           "fixedSize": { "type": "boolean", "description": "Excluded from responsive recalculation (Banner fixed-size exception precedent)" },
-          "isRequired": { "type": "boolean", "description": "Slot payload field, not the JSON Schema `required` keyword — whether this slot is mandatory for rendering." }
+          "isRequired": { "type": "boolean", "description": "Slot payload field, not the JSON Schema `required` keyword — whether this slot is mandatory for rendering." },
+          "propRefs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "description": "Props keys that supply this slot's content (v0: flat array only, e.g. an image slot may reference both a URL prop and an alt-text prop; no per-variant conditional binding yet)"
+          }
         }
       }
     },
