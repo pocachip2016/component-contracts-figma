@@ -35,7 +35,8 @@
       "kind": "image",
       "bbox": { "x": 0, "y": 0, "w": 864, "h": 528 },
       "fixedSize": true,
-      "isRequired": true
+      "isRequired": true,
+      "propRefs": ["backgroundImageUrl"]
     },
     {
       "id": "title_overlay",
@@ -45,6 +46,7 @@
       "bboxNormalized": { "x": 0.0787, "y": 0.5985, "w": 0.6979, "h": 0.3087 },
       "fixedSize": true,
       "isRequired": true,
+      "propRefs": ["titleOverlayImageUrl", "titleOverlayAlt"],
       "x-damRefs": [
         {
           "guide_id": 30,
