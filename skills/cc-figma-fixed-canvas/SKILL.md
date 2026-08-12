@@ -189,7 +189,7 @@ If `variantAxis` is not specified (default), the enum **becomes a variant proper
 ### Variant naming and binding
 
 For each variant value combination:
-1. Duplicate the base canvas frame
+1. Duplicate the base component (NOT the frame — the component created in Phase 2)
 2. **Immediately after duplication, reset sizing to FIXED on both dimensions** — duplication may preserve or lose sizing modes; re-apply explicitly:
    ```js
    duplicate.layoutSizingHorizontal = 'FIXED';
@@ -197,14 +197,21 @@ For each variant value combination:
    ```
 3. Apply variant-specific token overrides (if any token depends on the variant value)
 4. Name each variant: `"Variant=Weekend, State=Default"` (title-case, Property=Value format)
-5. Before calling `combineAsVariants`, run a FIXED enforcement pass:
+5. **Before calling `combineAsVariants`, convert each duplicate to a COMPONENT** — this is critical:
    ```js
-   variants.forEach(v => {
-     v.layoutSizingHorizontal = 'FIXED';
-     v.layoutSizingVertical = 'FIXED';
+   const variantComponents = [];
+   variants.forEach(dup => {
+     dup.layoutSizingHorizontal = 'FIXED';
+     dup.layoutSizingVertical = 'FIXED';
+     const comp = dup.createComponent();  // ← REQUIRED: Convert duplicate frame to COMPONENT
+     variantComponents.push(comp);
    });
    ```
-6. Call `combineAsVariants` to create the component set
+   Without `createComponent()` on each duplicate, `combineAsVariants` will fail with "A COMPONENT_SET node cannot have children of type other than COMPONENT".
+6. Call `combineAsVariants` with the component array:
+   ```js
+   const componentSet = figma.combineAsVariants(variantComponents, page);
+   ```
 7. Rename to `{ComponentName}/{PrimaryVariantValue}` (e.g. `Banner/Widget`)
 8. **After `combineAsVariants`**, manually grid-layout variants (same pattern as `cc-figma-component` Phase 3:8)
 
@@ -266,8 +273,13 @@ If an enum prop has `tokenMapped: true` but no Semantic token value is defined i
    - FIXED sizing immediately after creation
    - Label text and placeholder styling as specified in §3
 3. If `tokens != {}`, apply token bindings to any child fill/stroke/text colors that have corresponding token entries
-4. Validate: `get_screenshot` — confirm all slots are visible and positioned correctly within the base canvas bounds
-5. **Await user checkpoint** (if debug mode enabled)
+4. **Convert the base frame to a component** — this is required before variant creation:
+   ```js
+   const baseComponent = frame.createComponent();
+   ```
+   This transforms the frame into a COMPONENT node, which is necessary for `combineAsVariants` to work correctly in Phase 4.
+5. Validate: `get_screenshot` — confirm all slots are visible and positioned correctly within the base canvas bounds
+6. **Await user checkpoint** (if debug mode enabled)
 
 ### Phase 3 — propRefs wiring (TEXT properties only)
 
