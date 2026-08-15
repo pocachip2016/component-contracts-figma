@@ -110,15 +110,32 @@ Key sections used by this skill:
 
 ### For `kind: "image"`
 
-Create a **placeholder rectangle** — actual URLs are runtime concerns and cannot be bound at Figma generation time.
+Create a **placeholder rectangle** — with optional design-time reference image from `x-figma.referenceAssets` (experimental).
 
 1. Create a rectangle node with dimensions from `bbox.w` × `bbox.h`
 2. Position absolutely: `node.x = bbox.x`, `node.y = bbox.y`
 3. Set sizing: `layoutSizingHorizontal = 'FIXED'`, `layoutSizingVertical = 'FIXED'`
-4. Set `node.name = slot.id` — this is the sole in-canvas identification. Do **not** add a separate text node showing the slot id: an overlapping text label sits on top of the fill once real content is uploaded via `upload_assets` (nodeId-targeted fill), permanently occluding it. The Layers panel already shows the slot id via `node.name`.
-5. Fill color: if a placeholder/neutral Semantic token exists, bind it (Phase 0 validation); otherwise, use a fixed neutral gray (`#E5E7EB`, Tailwind `gray-200`) — **do not leave it colorless**
-6. Use 2pt stroke in `#9CA3AF` (Tailwind `gray-400`) for visual separation
-7. Document in Generation Notes: "Image slot — runtime content injected via prop [propRef1], [propRef2]. Figma shows placeholder; actual rendering driven by props."
+4. **referenceAssets branching (M1 experimental feature)**:
+   - **If `slot.["x-figma"].referenceAssets` is present** (array of `{ assetId, role }` objects):
+     - Attempt to fetch from DAM: call `GET /original/{assetId}` (read-only HTTP call)
+     - **On success**: Upload the asset image to Figma using the `upload_assets` tool:
+       ```
+       1. upload_assets(fileKey, count=1, nodeId=<rectangle-node-id>, scaleMode="FILL")
+       2. Receive { uploads: [{ submitUrl: "..." }] }
+       3. POST image bytes to submitUrl (Content-Type: image/png)
+       4. Rectangle fill is automatically updated to type IMAGE with the uploaded asset
+       ```
+     - **On failure** (asset not found, network error, or upload unsupported): Fall through to step 5 (gray placeholder) + document failure in Generation Notes
+   - **If `slot.["x-figma"].referenceAssets` is absent**: Use gray placeholder (step 5 below)
+5. Set `node.name = slot.id` — this is the sole in-canvas identification. Do **not** add a separate text node showing the slot id: an overlapping text label sits on top of the fill once real content is uploaded (via `upload_assets`, either the referenceAssets path above or a later nodeId-targeted fill), permanently occluding it. The Layers panel already shows the slot id via `node.name`.
+6. **Fill color**:
+   - If referenceAssets image was successfully applied: use the image fill (not a solid color)
+   - Otherwise: if a placeholder/neutral Semantic token exists, bind it (Phase 0 validation); otherwise, use a fixed neutral gray (`#E5E7EB`, Tailwind `gray-200`) — **do not leave it colorless**
+7. Use 2pt stroke in `#9CA3AF` (Tailwind `gray-400`) for visual separation
+8. Document in Generation Notes:
+   - "Image slot — runtime content injected via prop [propRef1], [propRef2]. Figma shows placeholder; actual rendering driven by props."
+   - If `x-figma.referenceAssets` was present: "Design-time reference image from DAM asset [assetId] ([role]) — for preview only, replaced at runtime."
+   - If `x-figma.referenceAssets` was present but failed to load: "Design-time reference image (DAM assetId [id]) failed to resolve — using gray placeholder instead."
 
 ### For `kind: "text"`
 
@@ -189,7 +206,7 @@ If `variantAxis` is not specified (default), the enum **becomes a variant proper
 ### Variant naming and binding
 
 For each variant value combination:
-1. Duplicate the base canvas frame
+1. Duplicate the base component (NOT the frame — the component created in Phase 2)
 2. **Immediately after duplication, reset sizing to FIXED on both dimensions** — duplication may preserve or lose sizing modes; re-apply explicitly:
    ```js
    duplicate.layoutSizingHorizontal = 'FIXED';
@@ -197,14 +214,21 @@ For each variant value combination:
    ```
 3. Apply variant-specific token overrides (if any token depends on the variant value)
 4. Name each variant: `"Variant=Weekend, State=Default"` (title-case, Property=Value format)
-5. Before calling `combineAsVariants`, run a FIXED enforcement pass:
+5. **Before calling `combineAsVariants`, convert each duplicate to a COMPONENT** — this is critical:
    ```js
-   variants.forEach(v => {
-     v.layoutSizingHorizontal = 'FIXED';
-     v.layoutSizingVertical = 'FIXED';
+   const variantComponents = [];
+   variants.forEach(dup => {
+     dup.layoutSizingHorizontal = 'FIXED';
+     dup.layoutSizingVertical = 'FIXED';
+     const comp = dup.createComponent();  // ← REQUIRED: Convert duplicate frame to COMPONENT
+     variantComponents.push(comp);
    });
    ```
-6. Call `combineAsVariants` to create the component set
+   Without `createComponent()` on each duplicate, `combineAsVariants` will fail with "A COMPONENT_SET node cannot have children of type other than COMPONENT".
+6. Call `combineAsVariants` with the component array:
+   ```js
+   const componentSet = figma.combineAsVariants(variantComponents, page);
+   ```
 7. Rename to `{ComponentName}/{PrimaryVariantValue}` (e.g. `Banner/Widget`)
 8. **After `combineAsVariants`**, manually grid-layout variants (same pattern as `cc-figma-component` Phase 3:8)
 
@@ -234,8 +258,13 @@ If an enum prop has `tokenMapped: true` but no Semantic token value is defined i
    - Check that no two slots have identical `bbox.x, bbox.y, bbox.w, bbox.h` (overlap detection)
    - Confirm all `bbox` values are non-negative and within `rendering.baseCanvas` bounds
 8. Inspect all `propRefs` across slots — confirm that referenced props exist in the contract's `props` section
-9. Identify unbound enum props (those not consumed by `propRefs` and without `x-figma.variantAxis: false`) — these become variant axes
-10. Present a complete plan to the user:
+9. **Inspect all `x-figma.referenceAssets` entries across slots (experimental feature, M1 phase)**:
+   - If any slot has `x-figma.referenceAssets`, confirm it is an array of objects with `{ assetId, role }` structure
+   - For each `assetId`, document the DAM API resolution procedure: at Phase 2/3 generation time, call `GET /original/{assetId}` to verify asset existence (read-only HTTP call, no DAM DB writes)
+   - **Actual asset fetch/upload occurs only in Phase 2 image slot rendering** — this step only validates the structure and documents the API path
+   - If `x-figma.referenceAssets` is missing, this is normal — slots are optional
+10. Identify unbound enum props (those not consumed by `propRefs` and without `x-figma.variantAxis: false`) — these become variant axes
+11. Present a complete plan to the user:
     - Component name and base canvas dimensions
     - Slot count by kind (image/text), with propRefs status
     - Variant matrix (if any enum props)
@@ -266,8 +295,13 @@ If an enum prop has `tokenMapped: true` but no Semantic token value is defined i
    - FIXED sizing immediately after creation
    - Layer naming and placeholder styling as specified in §3
 3. If `tokens != {}`, apply token bindings to any child fill/stroke/text colors that have corresponding token entries
-4. Validate: `get_screenshot` — confirm all slots are visible and positioned correctly within the base canvas bounds
-5. **Await user checkpoint** (if debug mode enabled)
+4. **Convert the base frame to a component** — this is required before variant creation:
+   ```js
+   const baseComponent = frame.createComponent();
+   ```
+   This transforms the frame into a COMPONENT node, which is necessary for `combineAsVariants` to work correctly in Phase 4.
+5. Validate: `get_screenshot` — confirm all slots are visible and positioned correctly within the base canvas bounds
+6. **Await user checkpoint** (if debug mode enabled)
 
 ### Phase 3 — propRefs wiring (TEXT properties only)
 
