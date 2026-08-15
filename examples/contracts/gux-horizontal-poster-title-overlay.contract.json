@@ -1,11 +1,13 @@
 {
   "$schema": "../../schema/schema.json",
   "id": "gux-horizontal-poster-title-overlay",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "displayName": "GUX 가로포스터 타이틀 오버레이 (832x468)",
   "description": "GUX 가로포스터(832x468) 배경 위에 타이틀 로고(600x160 원본, 실측 안전영역 360x160)를 합성하는 템플릿. dev-template-automation Step 0~4 실측 기반, filename-contract 방식(GUX_가로포스터_IMG/LOGO 파일명 페어링)으로 발견/검증됨.",
   "status": "draft",
-  "platforms": ["web"],
+  "platforms": [
+    "web"
+  ],
   "tokens": {},
   "props": {
     "backgroundImageUrl": {
@@ -15,38 +17,64 @@
     },
     "titleOverlayImageUrl": {
       "type": "string",
-      "required": true,
-      "description": "title_overlay 슬롯, Dam에서 title-key로 조회한 LOGO(600x160 png)"
+      "required": false,
+      "description": "title_overlay 슬롯, Dam에서 title-key로 조회한 LOGO(600x160 png). G.9 실측(plans/dev-gux-folder-componentization/artifacts/verdict_g9.md) 결과 230601_[GUX]가로포스터_월정액_13종의 13개 팩 중 12개 팩은 이 소스가 없고 타이틀이 backdrop(IMG)에 이미 합성돼 있음을 확인 — 그런 팩은 이 prop을 생략한다."
     },
     "titleOverlayAlt": {
       "type": "string",
-      "required": true,
-      "description": "접근성 대체 텍스트. 소싱 규칙: 1순위 title-key 원본 제목 문자열, 2순위(원본 제목 미확보 시) 에셋 파일명에서 역파싱한 제목(예: [GUX_가로포스터_LOGO]600x160_<제목>.png의 <제목> 캡처값)"
+      "required": false,
+      "description": "접근성 대체 텍스트. 소싱 규칙: 1순위 title-key 원본 제목 문자열, 2순위(원본 제목 미확보 시) 에셋 파일명에서 역파싱한 제목(예: [GUX_가로포스터_LOGO]600x160_<제목>.png의 <제목> 캡처값). titleOverlayImageUrl을 제공하면 호출자는 titleOverlayAlt도 함께 제공해야 한다(계약상 커플링, 스키마 레벨로 강제되진 않음). titleOverlayImageUrl이 없으면 titleOverlayAlt도 불필요하다."
     }
   },
-  "states": ["default"],
+  "states": [
+    "default"
+  ],
   "variants": [
-    { "id": "default", "displayName": "기본", "props": {} }
+    {
+      "id": "default",
+      "displayName": "기본",
+      "props": {}
+    }
   ],
   "slots": [
     {
       "id": "backdrop",
       "role": "background",
       "kind": "image",
-      "bbox": { "x": 0, "y": 0, "w": 832, "h": 468 },
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "w": 832,
+        "h": 468
+      },
       "fixedSize": true,
       "isRequired": true,
-      "propRefs": ["backgroundImageUrl"]
+      "propRefs": [
+        "backgroundImageUrl"
+      ]
     },
     {
       "id": "title_overlay",
       "role": "title_overlay",
       "kind": "image",
-      "bbox": { "x": 40, "y": 267, "w": 360, "h": 160 },
-      "bboxNormalized": { "x": 0.048, "y": 0.5705, "w": 0.4327, "h": 0.3419 },
+      "bbox": {
+        "x": 40,
+        "y": 267,
+        "w": 360,
+        "h": 160
+      },
+      "bboxNormalized": {
+        "x": 0.048,
+        "y": 0.5705,
+        "w": 0.4327,
+        "h": 0.3419
+      },
       "fixedSize": true,
-      "isRequired": true,
-      "propRefs": ["titleOverlayImageUrl", "titleOverlayAlt"],
+      "isRequired": false,
+      "propRefs": [
+        "titleOverlayImageUrl",
+        "titleOverlayAlt"
+      ],
       "x-damRefs": [
         {
           "guide_id": 27,
@@ -75,30 +103,60 @@
       "overflow": "reject"
     },
     "safeArea": [
-      { "slotId": "title_overlay", "note": "얼굴/주요 피사체 충돌 검수 대상 — Step 9(safe-area-gate)에서 tmdb_ref_faces 연동 예정, 이번 계약은 참조만" }
+      {
+        "slotId": "title_overlay",
+        "note": "얼굴/주요 피사체 충돌 검수 대상 — Step 9(safe-area-gate)에서 tmdb_ref_faces 연동 예정, 이번 계약은 참조만"
+      }
     ]
   },
   "rendering": {
-    "baseCanvas": { "width": 832, "height": 468 },
-    "outputFormats": ["jpg"]
+    "baseCanvas": {
+      "width": 832,
+      "height": 468
+    },
+    "outputFormats": [
+      "jpg"
+    ]
   },
   "x-dam": {
     "uidRuleVersion": "uid-v1",
     "damCombo": [
-      { "guide_id": 27, "canvas_w": 832, "canvas_h": 468 },
-      { "guide_id": 27, "canvas_w": 600, "canvas_h": 160 }
+      {
+        "guide_id": 27,
+        "canvas_w": 832,
+        "canvas_h": 468
+      },
+      {
+        "guide_id": 27,
+        "canvas_w": 600,
+        "canvas_h": 160
+      }
     ],
     "assetQuery": {
       "method": "filename-contract-title-key",
-      "backdrop": { "facet": "GUX_가로포스터_IMG", "resolution": "832x468", "ext": "jpg" },
-      "titleOverlay": { "facet": "GUX_가로포스터_LOGO", "resolution": "600x160", "ext": "png" },
+      "backdrop": {
+        "facet": "GUX_가로포스터_IMG",
+        "resolution": "832x468",
+        "ext": "jpg"
+      },
+      "titleOverlay": {
+        "facet": "GUX_가로포스터_LOGO",
+        "resolution": "600x160",
+        "ext": "png"
+      },
       "pairing": "title-key 정규화 후 1:1 매칭 (Step3 기준 37.2%, 13,618쌍 검증됨)"
     },
     "sourceCohort": "GUX_가로포스터_832x468_v1 (Step2 CLIP 동질성 검증, threshold=0.3478, n=36595)",
     "provenance": {
       "gate3_note": "GATE3 sibling/CR-npz 매칭(43%)은 본 계약이 쓰는 방식이 아님 — 별개 메커니즘, FAIL이 이 계약에 적용되지 않음",
       "gate_verdict_used": "filename-contract approach — GO (step0_feasibility.md 종합판정)",
-      "steps": ["step0_feasibility.md", "step1_ranking.json", "step2_cohort", "step3_slots.json", "step4_tokens.json"]
+      "steps": [
+        "step0_feasibility.md",
+        "step1_ranking.json",
+        "step2_cohort",
+        "step3_slots.json",
+        "step4_tokens.json"
+      ]
     }
   },
   "usage": {
@@ -132,6 +190,11 @@
       "changes": [
         "VD.7 — UHD/수어 배지 재검증 결과 sign/uhd 축 GO(combined/uhdSign은 NO-GO)로 확정됐으나, 배지를 이 계약의 title_overlay 슬롯에 편입하지 않고 신규 sibling 계약 gux-horizontal-poster-badge-slot(v0.1.0)으로 분리 — 배지 x 위치가 로고 길이에 종속적으로 이동해 이 계약의 고정 360px 안전영역 크롭과 충돌하기 때문. usage.dont의 배지 유예 문구를 '증거 없음'에서 'sibling 계약 참조'로 갱신, backdrop/title_overlay 슬롯 자체는 변경 없음"
       ]
+    },
+    {
+      "version": "0.4.0",
+      "date": "2026-08-15",
+      "changes": "G.9 실측(230601_[GUX]가로포스터_월정액_13종, 44 PSD) 결과 13개 팩 중 12개 팩(31 PSD)이 title_overlay 소스 없이 backdrop에 타이틀을 이미 합성해 저작함을 확인 (backdrop 레이어 프로브, 12/12 confirm). title_overlay 슬롯을 isRequired:false로 완화하고 props.titleOverlayImageUrl/titleOverlayAlt를 required:false로 변경. backdrop/title_overlay 슬롯 bbox 자체는 불변 — required 플래그만 변경. 근거: plans/dev-gux-folder-componentization/artifacts/verdict_g9.md, g9_backdrop_layer_probe.json"
     }
   ]
 }
