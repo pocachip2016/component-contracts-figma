@@ -115,7 +115,7 @@ Create a **placeholder rectangle** — actual URLs are runtime concerns and cann
 1. Create a rectangle node with dimensions from `bbox.w` × `bbox.h`
 2. Position absolutely: `node.x = bbox.x`, `node.y = bbox.y`
 3. Set sizing: `layoutSizingHorizontal = 'FIXED'`, `layoutSizingVertical = 'FIXED'`
-4. Add a text label showing the slot id: `child.characters = slot.id`
+4. Set `node.name = slot.id` — this is the sole in-canvas identification. Do **not** add a separate text node showing the slot id: an overlapping text label sits on top of the fill once real content is uploaded via `upload_assets` (nodeId-targeted fill), permanently occluding it. The Layers panel already shows the slot id via `node.name`.
 5. Fill color: if a placeholder/neutral Semantic token exists, bind it (Phase 0 validation); otherwise, use a fixed neutral gray (`#E5E7EB`, Tailwind `gray-200`) — **do not leave it colorless**
 6. Use 2pt stroke in `#9CA3AF` (Tailwind `gray-400`) for visual separation
 7. Document in Generation Notes: "Image slot — runtime content injected via prop [propRef1], [propRef2]. Figma shows placeholder; actual rendering driven by props."
@@ -264,7 +264,7 @@ If an enum prop has `tokenMapped: true` but no Semantic token value is defined i
 2. For each slot in `slots[]`, create the appropriate child frame (image or text, per §3):
    - Absolute positioning: `child.x = bbox.x`, `child.y = bbox.y`
    - FIXED sizing immediately after creation
-   - Label text and placeholder styling as specified in §3
+   - Layer naming and placeholder styling as specified in §3
 3. If `tokens != {}`, apply token bindings to any child fill/stroke/text colors that have corresponding token entries
 4. Validate: `get_screenshot` — confirm all slots are visible and positioned correctly within the base canvas bounds
 5. **Await user checkpoint** (if debug mode enabled)
