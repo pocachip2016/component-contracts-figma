@@ -1,0 +1,117 @@
+{
+  "$schema": "../../schema/schema.json",
+  "id": "gux-promotion-content-type-b-x2",
+  "version": "0.1.1",
+  "displayName": "GUX 프로모션 콘텐츠유형 B유형x2 (864x528)",
+  "description": "GUX 프로모션(864x528, guide_id 30, layout=B유형x2) 배경 위에 로고+타이틀 텍스트를 합성하는 템플릿. dev-gux-folder-componentization G.3 F1~F2 실측 기반. A유형X1(416x528)/C유형X4(1760x528)는 같은 폴더 그룹의 다른 캔버스 변형이며 이 계약의 scope 밖.",
+  "status": "approved",
+  "platforms": ["web"],
+  "tokens": {},
+  "props": {
+    "backgroundImageUrl": {
+      "type": "string",
+      "required": true,
+      "description": "backdrop 슬롯, 864x528 배경 이미지"
+    },
+    "titleOverlayImageUrl": {
+      "type": "string",
+      "required": true,
+      "description": "title_overlay 슬롯, 로고+타이틀 텍스트가 합성된 이미지. F2 실측 기준 로고/텍스트 서브분리는 v0.1.0 scope 밖(F4에서 컴포넌트 레벨 분리 여부 결정)"
+    },
+    "titleOverlayAlt": {
+      "type": "string",
+      "required": true,
+      "description": "접근성 대체 텍스트"
+    }
+  },
+  "states": ["default"],
+  "variants": [
+    { "id": "default", "displayName": "기본", "props": {} }
+  ],
+  "slots": [
+    {
+      "id": "backdrop",
+      "role": "background",
+      "kind": "image",
+      "bbox": { "x": 0, "y": 0, "w": 864, "h": 528 },
+      "fixedSize": true,
+      "isRequired": true,
+      "propRefs": ["backgroundImageUrl"]
+    },
+    {
+      "id": "title_overlay",
+      "role": "title_overlay",
+      "kind": "image",
+      "bbox": { "x": 68, "y": 316, "w": 603, "h": 163 },
+      "bboxNormalized": { "x": 0.0787, "y": 0.5985, "w": 0.6979, "h": 0.3087 },
+      "fixedSize": true,
+      "isRequired": true,
+      "propRefs": ["titleOverlayImageUrl", "titleOverlayAlt"],
+      "x-damRefs": [
+        {
+          "guide_id": 30,
+          "canvas_w": 864,
+          "canvas_h": 528,
+          "schema_generation": "current",
+          "source_psd_path": "/mnt/d/dam_data/realm/01. olleh tv 운영디자인 가이드/TV/@[TV]템플릿 및 최신 가이드/GUX/03_프로모션_콘텐츠유형/231101_[GUX]프로모션_B유형x2_10월27일가이드영역변경적용/[GUX_프로모션_X2]864x528_영화홈_10월27일가이드영역변경적용.psd",
+          "layer_path": "프로모션_X2/가이드 영역(10.27 갱신)/샘플_정보 가이드 영역 (1)"
+        },
+        {
+          "guide_id": 30,
+          "canvas_w": 864,
+          "canvas_h": 528,
+          "schema_generation": "current",
+          "source_psd_path": "/mnt/d/dam_data/realm/01. olleh tv 운영디자인 가이드/TV/@[TV]템플릿 및 최신 가이드/GUX/03_프로모션_콘텐츠유형/231213_[GUX]프로모션_B유형x2_10월27일가이드영역변경적용_키즈랜드/[GUX]프로모션_B유형x2_10월27일가이드영역변경적용_키즈랜드.psd",
+          "layer_path": "프로모션_X2/가이드 영역(10.27 갱신)/샘플_정보 가이드 영역 (1)"
+        }
+      ]
+    }
+  ],
+  "x-dam": {
+    "sourceCohort": "GUX_프로모션_864x528_B유형x2 (guide_id=30, current schema generation)",
+    "provenance": {
+      "gate_verdict_used": "GO — plans/dev-gux-folder-componentization/artifacts/g3_f2_verdict.md",
+      "evidence": "plans/dev-gux-folder-componentization/artifacts/g3_f2_evidence.json",
+      "steps": ["G.1a foldername-axis-parser", "G.3 F1 axis candidates", "G.3 F2 psd 실측(9표본)"]
+    }
+  },
+  "constraints": {
+    "text": {
+      "maxLength": 22,
+      "overflow": "reject",
+      "rationale": "filename-based 카피 길이 분포 (n=759, p50=12, p90=22, max=79) 기반. DAM 프로덕션 자산 [GUX_프로모션_X2]864x528_... 파일명에서 제목 정규화 후 한글 음절 수 측정. horizontal-poster Step4와 동일 방법론. 2026-08-06 실측 완료."
+    }
+  },
+  "usage": {
+    "do": [
+      "title_overlay.kind가 image이므로(사전 합성된 raster 자산) constraints.text는 실시간 텍스트 레이아웃 제약이 아니라 자산 매칭/QA 시점의 카피 길이 참고 지표다. 컴포넌트 코드에 런타임 검증 로직을 넣지 않는다(horizontal-poster 동일 전례, step6.md §6-2 참조)."
+    ],
+    "dont": [
+      "text_lines(1줄/2줄)를 variant prop으로 추가하지 말 것 — legacy schema(2023-01~06)에만 형제 그룹으로 존재했고 current schema(2023-11~)는 단일 컨테이너로 통합됨. 텍스트 줄 수는 컨테이너 내부 자동 줄바꿈으로 처리(F2 evidence 참고)",
+      "theme(영화홈/슈퍼팩홈/키즈랜드 등)을 geometry variant로 추가하지 말 것 — 전 세대에서 좌표 불변 확인, 콘텐츠 소스 구분일 뿐 슬롯 축이 아님",
+      "legacy schema 좌표(x=39,y=327,w=602,h=163)를 이 계약에 섞지 말 것 — 별도 버전을 만들지 않고 g3_f2_verdict.md에 legacy로만 기록, v0.1.0은 current schema 좌표만 채택",
+      "skylife 폴더(무협액션/캐치온) 패턴을 이 계약의 근거로 쓰지 말 것 — 가이드 미사용 bespoke 구성, slot 재사용 불가(04_컨테이너_메뉴와 동일 사유)"
+    ]
+  },
+  "changelog": [
+    {
+      "version": "0.1.1",
+      "date": "2026-08-06",
+      "changes": [
+        "G.8 promotion-constraints-discovery — constraints.text.maxLength/overflow 실측 완료. 근거: DAM 프로덕션 자산 759건 filename-based 카피 길이 분포 (p90=22).",
+        "maxLength=22 (단일 값, 정책 GO. horizontal-poster Step4 방법론 동일).",
+        "overflow='reject' (QA 참고 지표만, 컴포넌트 런타임 로직 아님. title_overlay.kind='image'라 사전 합성 raster; horizontal-poster 동일 전례).",
+        "usage.do 정정: F4 착수 단계의 오해 소지 표현('렌더 제외') 제거, 정책의 실제 의미(QA 참고 지표) 명확화."
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-08-05",
+      "changes": [
+        "G.3 F1~F2 — 03_프로모션_콘텐츠유형 B유형x2(864x528, guide_id 30) 계약 초안. backdrop(0,0,864,528) + title_overlay(68,316,603,163, current schema 실측 기준) 슬롯 정의.",
+        "text_lines/theme 축은 evidence상 geometry 불변으로 확인되어 variant에서 제외.",
+        "legacy schema(4건)/skylife bespoke(2건)/키즈랜드_하단텍스트 이상치(1건)는 evidence에서 제외 — 근거는 g3_f2_verdict.md 참조."
+      ]
+    }
+  ]
+}

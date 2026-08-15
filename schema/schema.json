@@ -111,6 +111,102 @@
     "accessibility": { "type": "object" },
     "usage": { "type": "object" },
     "platformNotes": { "type": "object" },
-    "changelog": { "type": "array" }
+    "changelog": { "type": "array" },
+    "slots": {
+      "type": "array",
+      "description": "Pixel-bbox content-injection slots (batch rendering / Dam asset mapping). Distinct from composition.slots (Figma structural children) despite the shared name.",
+      "items": {
+        "type": "object",
+        "required": ["id", "bbox"],
+        "properties": {
+          "id": { "type": "string" },
+          "role": { "type": "string", "description": "Semantic role, e.g. title_overlay" },
+          "kind": { "type": "string", "enum": ["image", "text"] },
+          "bbox": {
+            "type": "object",
+            "required": ["x", "y", "w", "h"],
+            "additionalProperties": false,
+            "description": "px, top-left origin of the base canvas",
+            "properties": {
+              "x": { "type": "number", "minimum": 0 },
+              "y": { "type": "number", "minimum": 0 },
+              "w": { "type": "number", "exclusiveMinimum": 0 },
+              "h": { "type": "number", "exclusiveMinimum": 0 }
+            }
+          },
+          "bboxNormalized": {
+            "type": "object",
+            "required": ["x", "y", "w", "h"],
+            "additionalProperties": false,
+            "description": "0-1 normalized (optional field, but all 4 values are required together when present)",
+            "properties": {
+              "x": { "type": "number", "minimum": 0, "maximum": 1 },
+              "y": { "type": "number", "minimum": 0, "maximum": 1 },
+              "w": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+              "h": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 }
+            }
+          },
+          "fixedSize": { "type": "boolean", "description": "Excluded from responsive recalculation (Banner fixed-size exception precedent)" },
+          "isRequired": { "type": "boolean", "description": "Slot payload field, not the JSON Schema `required` keyword — whether this slot is mandatory for rendering." },
+          "propRefs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "description": "Props keys that supply this slot's content (v0: flat array only, e.g. an image slot may reference both a URL prop and an alt-text prop; no per-variant conditional binding yet). Confirmed real case needing conditional binding: gux-event-badge-icon (badge_type selects which slot group is active) — left empty rather than force-fit into v0. Design v1 only when a generator actually needs to consume that contract's propRefs (currently NO-GO, no consumer exists)."
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "maxLength": { "type": "integer", "minimum": 1 },
+            "overflow": { "type": "string", "enum": ["shrink", "clamp", "reject"] }
+          }
+        },
+        "safeArea": {
+          "type": "array",
+          "description": "Slot references subject to collision checks (e.g. logo-vs-face)",
+          "items": {
+            "type": "object",
+            "properties": {
+              "slotId": { "type": "string" },
+              "note": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "rendering": {
+      "type": "object",
+      "properties": {
+        "baseCanvas": {
+          "type": "object",
+          "required": ["width", "height"],
+          "additionalProperties": false,
+          "properties": {
+            "width": { "type": "integer", "minimum": 1 },
+            "height": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "outputFormats": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["png", "jpg", "webp"] }
+        }
+      }
+    },
+    "x-dam": {
+      "type": "object",
+      "description": "Dam-dependent field namespace, kept separate from core so the contract stays valid without Dam. Property name has a hyphen — consuming code must use bracket access (contract['x-dam']).",
+      "properties": {
+        "assetQuery": { "type": "object", "description": "Free-form — exact query shape finalized in Step 6/8" },
+        "sourceCohort": { "type": "string" },
+        "provenance": { "type": "object", "description": "Free-form, e.g. sha256/git commit/db_snapshot" }
+      }
+    }
   }
 }

@@ -1,0 +1,347 @@
+{
+  "id": "gux-event-badge-icon",
+  "version": "0.1.0",
+  "displayName": "GUX 이벤트 배지 아이콘",
+  "canvas": {
+    "width": 416,
+    "height": 234
+  },
+  "slots": [
+    {
+      "id": "poster",
+      "label": "Poster",
+      "sourceLayers": [
+        {
+          "name": "VOD_리스트 썸네일_샘플",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        },
+        {
+          "name": "IMG",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        }
+      ]
+    },
+    {
+      "id": "background",
+      "label": "Background",
+      "sourceLayers": [
+        {
+          "name": "Background",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        },
+        {
+          "name": "배경",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        }
+      ]
+    },
+    {
+      "id": "poster_image",
+      "label": "Poster Image",
+      "sourceLayers": [
+        {
+          "name": "sample_01",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        },
+        {
+          "name": "sample_02",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        },
+        {
+          "name": "sample_03",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        },
+        {
+          "name": "sample_05",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        },
+        {
+          "name": "sample_04",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        }
+      ]
+    },
+    {
+      "id": "overlay",
+      "label": "Overlay",
+      "sourceLayers": [
+        {
+          "name": "샘플_하단 필터",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        },
+        {
+          "name": "샘플_상단 필터",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 80
+          }
+        }
+      ]
+    },
+    {
+      "id": "poster_title",
+      "label": "Poster Title",
+      "sourceLayers": [
+        {
+          "name": "이미지 타이틀 영역",
+          "bbox": {
+            "x": 20,
+            "y": 171,
+            "width": 207,
+            "height": 43
+          }
+        },
+        {
+          "name": "이미지 타이틀",
+          "bbox": {
+            "x": 20,
+            "y": 171,
+            "width": 207,
+            "height": 43
+          }
+        }
+      ]
+    },
+    {
+      "id": "reference",
+      "label": "Reference",
+      "sourceLayers": [
+        {
+          "name": "샘플_이미지 타이틀",
+          "bbox": {
+            "x": 15,
+            "y": 148,
+            "width": 102,
+            "height": 72
+          }
+        },
+        {
+          "name": "Layer 2",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        },
+        {
+          "name": "Layer 3",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        }
+      ]
+    },
+    {
+      "id": "hidden",
+      "label": "Hidden",
+      "sourceLayers": [
+        {
+          "name": "Layer 2",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        },
+        {
+          "name": "Layer 3",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 416,
+            "height": 234
+          }
+        }
+      ]
+    },
+    {
+      "id": "guide",
+      "label": "Guide",
+      "sourceLayers": [
+        {
+          "name": "가이드 영역",
+          "bbox": {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "image_guide_area",
+      "label": "Image Guide Area",
+      "sourceLayers": [
+        {
+          "name": "샘플_이미지 가이드 영역(2) copy",
+          "bbox": {
+            "x": 218,
+            "y": 64,
+            "width": 199,
+            "height": 106
+          }
+        }
+      ]
+    },
+    {
+      "id": "info_guide_area",
+      "label": "Info Guide Area",
+      "sourceLayers": [
+        {
+          "name": "샘플_정보 가이드 영역 (1)",
+          "bbox": {
+            "x": 268,
+            "y": 64,
+            "width": 149,
+            "height": 70
+          }
+        }
+      ]
+    },
+    {
+      "id": "badge_text",
+      "label": "Badge Text",
+      "sourceLayers": [
+        {
+          "name": "% 할인",
+          "bbox": {
+            "x": 345,
+            "y": 98,
+            "width": 60,
+            "height": 20
+          }
+        },
+        {
+          "name": "20",
+          "bbox": {
+            "x": 285,
+            "y": 79,
+            "width": 56,
+            "height": 39
+          }
+        },
+        {
+          "name": "예약구매시",
+          "bbox": {
+            "x": 338,
+            "y": 73,
+            "width": 67,
+            "height": 14
+          }
+        },
+        {
+          "name": "TV쿠폰 4,900원 증정",
+          "bbox": {
+            "x": 278,
+            "y": 103,
+            "width": 129,
+            "height": 15
+          }
+        },
+        {
+          "name": "예약구매 시 쿠폰 증정1",
+          "bbox": {
+            "x": 315,
+            "y": 76,
+            "width": 90,
+            "height": 45
+          }
+        },
+        {
+          "name": "예약구매 시 쿠폰 증정2",
+          "bbox": {
+            "x": 321,
+            "y": 78,
+            "width": 84,
+            "height": 42
+          }
+        },
+        {
+          "name": "예약구매시",
+          "bbox": {
+            "x": 329,
+            "y": 81,
+            "width": 78,
+            "height": 16
+          }
+        },
+        {
+          "name": "기간 한정",
+          "bbox": {
+            "x": 351,
+            "y": 80,
+            "width": 54,
+            "height": 14
+          }
+        },
+        {
+          "name": "TV쿠폰 4,900원 증정",
+          "bbox": {
+            "x": 301,
+            "y": 90,
+            "width": 104,
+            "height": 36
+          }
+        }
+      ]
+    }
+  ]
+}

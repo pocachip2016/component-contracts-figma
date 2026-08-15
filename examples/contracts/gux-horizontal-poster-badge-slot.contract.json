@@ -1,0 +1,121 @@
+{
+  "$schema": "../../schema/schema.json",
+  "id": "gux-horizontal-poster-badge-slot",
+  "version": "0.1.0",
+  "displayName": "GUX 가로포스터 UHD/수어 배지 슬롯 axis proof (832x468, 600x160 로고 소스)",
+  "description": "dev-figma-variant-design VD.7이 PSD 4건(8월의 크리스마스/악마가이사왔다/오펜하이머/라벨_긴로고_상단배치) 교차검증으로 확인한 UHD/수어 배지 존재·variant 축 증명 전용 계약. gux-horizontal-poster-title-overlay(같은 콤보, guide_id=27)의 title_overlay 슬롯을 확장하지 않고 sibling 계약으로 분리했다 — 배지 x 위치가 로고 텍스트 길이에 종속적으로 이동해 title_overlay의 고정 360px 안전영역 크롭과 구조적으로 충돌하기 때문이다(근거: plans/dev-figma-variant-design/artifacts/badge_axis_verdict.md). 완성된 배치 좌표를 갖는 슬롯 스펙이 아니라, 배지의 존재 여부/variant 축/크기/토큰 evidence만 선반영한 중간 산출물이다.",
+  "status": "draft",
+  "platforms": ["web"],
+  "tokens": {},
+  "props": {
+    "badge": {
+      "type": "enum",
+      "values": ["none", "uhd", "sign"],
+      "default": "none",
+      "required": false,
+      "tokenMapped": false,
+      "description": "sign(수어) 축: PSD 2건(8월의 크리스마스, 악마가이사왔다) 일치로 GO. uhd 축: 오펜하이머 1건 활성 + 나머지 3건의 비활성 UHD 형제 그룹(동일 pill 위치 클래스)으로 GO — 단 '비활성 형제 그룹 evidence' 근거 한계가 있음(changelog 참조). 'uhdSign'(동시 표시)은 4건 전부 UHD/수어가 같은 pill 슬롯을 공유하는 상호배타 토글 구조로 확인되어(반증, 단순 미확보 아님) 열거값에서 명시 제외."
+    }
+  },
+  "composition": {
+    "slots": {
+      "badge": {
+        "description": "UHD/수어 배지 pill — logo-right anchor로 배치, poster absolute x는 로고 길이에 따라 가변. anchor rule 상세는 x-dam.anchorRule 참조.",
+        "children": {
+          "badge_uhd": { "type": "image", "description": "UHD 배지 (visible when badge='uhd')" },
+          "badge_sign": { "type": "image", "description": "수어 배지 (visible when badge='sign')" }
+        }
+      }
+    }
+  },
+  "states": ["default"],
+  "variants": [
+    { "id": "none", "displayName": "배지 없음", "props": { "badge": "none" } },
+    { "id": "uhd", "displayName": "UHD 배지", "props": { "badge": "uhd" } },
+    { "id": "sign", "displayName": "수어 배지", "props": { "badge": "sign" } }
+  ],
+  "rendering": {
+    "baseCanvas": { "width": 832, "height": 468 },
+    "outputFormats": ["jpg"]
+  },
+  "x-dam": {
+    "uidRuleVersion": "uid-v1",
+    "damCombo": [
+      { "guide_id": 27, "canvas_w": 832, "canvas_h": 468 },
+      { "guide_id": 27, "canvas_w": 600, "canvas_h": 160 }
+    ],
+    "sourceCohort": "GUX_가로포스터_832x468_v1 (gux-horizontal-poster-title-overlay와 동일 콤보)",
+    "badgeSizeEvidence": {
+      "w": [87, 89],
+      "h": [41, 42],
+      "note": "pill 배지 크기, 4개 표본(활성/비활성 불문) 전부 ±2px 이내 일치"
+    },
+    "tokenEvidence": {
+      "color": "#000000",
+      "fontFamily": "NotoSansCJKkr-Bold",
+      "fontSize": "40.28px",
+      "note": "배지 텍스트 레이어(UHD/수어) 기준, 4개 표본 100% 일치. 기존 @theme 토큰과의 매핑 여부는 Step 3(React 구현) 착수 시 design-system/src/index.css 대조 후 확정 — 이 계약에서는 원값만 기록(tokens 필드는 미매핑 상태로 빈 객체 유지)"
+    },
+    "anchorRule": {
+      "type": "logo-relative",
+      "basis": "로고(LOGO 그룹) 오른쪽 끝을 기준으로 배치",
+      "offsetX": {
+        "range": [0, 15],
+        "mean": 8,
+        "unit": "px",
+        "sampleMeasurements": {
+          "8월의 크리스마스": 7,
+          "악마가이사왔다": 16,
+          "오펜하이머": 15
+        },
+        "note": "로고 텍스트 길이에 따라 로고 오른쪽 끝이 이동하므로 배지 x도 함께 가변. poster absolute x를 하드코딩하면 안 됨"
+      },
+      "alignY": "bottom",
+      "positionY": {
+        "absolute": 388,
+        "range": [387, 429],
+        "basis": "title_overlay.bbox.y(267) + 로고 내 배지 상대Y(120~162) ≈ 387~429",
+        "note": "Y축은 title_overlay와 정합적이며, 로고 높이 변동에 영향 받지 않음"
+      }
+    },
+    "positionEvidence": {
+      "relativeToLogoRightEdge": "로고 그룹 우측 끝에서 0~15px 간격, 로고 캔버스(600x160) 기준 y=120~162(하단 정렬) — 4개 표본 일치",
+      "posterCoordinates": {
+        "sampleBasis": "3개 표본 poster x 예측값(로고 길이 기반): 크리스마스 332, 악마가이사왔다 464, 오펜하이머 501 — 고정값 아니라 logo bbox에서 유도",
+        "note": "poster absolute x를 계약에 고정하지 않음(logo-relative rule만 정의). 실제 구현에서는 로고 bbox를 런타임에 측정하고 offsetX를 더해 계산할 것"
+      }
+    },
+    "provenance": {
+      "steps": [
+        "plans/dev-figma-variant-design/artifacts/badge_evidence_oppenheimer_uhd.json",
+        "plans/dev-figma-variant-design/artifacts/badge_evidence_devil_moved_in_sign.json",
+        "plans/dev-figma-variant-design/artifacts/badge_evidence_uhd_sign_combined_topplacement.json",
+        "plans/dev-template-automation/artifacts/step4_psd_layers.json",
+        "plans/dev-figma-variant-design/artifacts/badge_axis_verdict.md"
+      ]
+    }
+  },
+  "usage": {
+    "do": [
+      "배지는 logo 그룹의 오른쪽 끝을 기준으로 배치할 것 (x-dam.anchorRule.offsetX: 0~15px, 로고 길이에 따라 가변)",
+      "배지 슬롯의 poster absolute x를 하드코딩하지 말 것 — 런타임에 logo bbox 우측을 기준으로 offsetX만큼 오른쪽에 배치",
+      "배지의 y 좌표는 388 근처로 고정 가능 (title_overlay와 정합적, 로고 높이 변동 영향 없음)"
+    ],
+    "dont": [
+      "이 계약을 gux-horizontal-poster-title-overlay의 title_overlay 슬롯 내부에 얹지 말 것 — 배지 x 위치가 로고 길이에 따라 가변이라 고정 360px 안전영역 크롭과 구조적으로 충돌한다. 배지는 title_overlay와 독립된 sibling slot으로 취급한다",
+      "badge='uhdSign'(동시 표시) 값을 사용하지 말 것 — 4개 표본 전부 UHD/수어가 상호배타 토글로 구조화되어 있어 동시 표시 evidence가 없다(반증)",
+      "배지 x 좌표를 고정값(예: 332px)으로 하드코딩하지 말 것 — 3개 표본이 332/464/501로 로고 길이 따라 다르므로, logo-relative anchor rule(x-dam.anchorRule)로 계산할 것"
+    ]
+  },
+  "changelog": [
+    {
+      "version": "0.1.0",
+      "date": "2026-08-05",
+      "changes": [
+        "VD.7 axis proof 초안 — PSD 4건 교차검증으로 sign/uhd 축 GO, combined(uhdSign) 축 NO-GO 확정. badge: 'none'|'uhd'|'sign' enum과 크기(87~89x41~42px)/토큰(#000000, NotoSansCJKkr-Bold, 40.28px) evidence 포함. title_overlay 확장 대신 sibling 계약으로 분리(안전영역 폭 충돌 회피).",
+        "배치 방식: logo-relative anchor로 정의. posterAbsolute x는 로고 길이에 따라 332/464/501px로 가변(3개 표본)이므로 고정값으로 계약화하지 않음. x-dam.anchorRule에 logo-right edge, offsetX 0~15px, 샘플 측정치 기록. composition.slots에 badge 슬롯 구조 정의, usage.do에 runtime 계산 방식 명시. slots[]는 정의하지 않음(poster absolute x 미확정이므로 매직넘버 회피).",
+        "승인 기준 만족: (1) badge enum만 ('none'|'uhd'|'sign'), (2) uhdSign 제외 명시, (3) logo-relative sibling slot, (4) 단일 poster absolute x 하드코딩 안 함, (5) x-dam.anchorRule로 실제 배치 rule 명확화"
+      ]
+    }
+  ]
+}
