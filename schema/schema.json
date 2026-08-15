@@ -152,7 +152,7 @@
             "type": "array",
             "items": { "type": "string" },
             "minItems": 1,
-            "description": "Props keys that supply this slot's content (v0: flat array only, e.g. an image slot may reference both a URL prop and an alt-text prop; no per-variant conditional binding yet)"
+            "description": "Props keys that supply this slot's content (v0: flat array only, e.g. an image slot may reference both a URL prop and an alt-text prop; no per-variant conditional binding yet). Confirmed real case needing conditional binding: gux-event-badge-icon (badge_type selects which slot group is active) — left empty rather than force-fit into v0. Design v1 only when a generator actually needs to consume that contract's propRefs (currently NO-GO, no consumer exists)."
           }
         }
       }
