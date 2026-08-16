@@ -1,0 +1,102 @@
+{
+  "$schema": "../../schema/schema.json",
+  "id": "gux-detail-page-channel-badge-slot",
+  "version": "0.1.0",
+  "displayName": "GUX 단편상세 채널 구독배지 슬롯 (1920x1080, 600x240 로고 소스)",
+  "description": "dev-gux-folder-componentization G.13 follow-up(단편상세_IMG anchorRule GO 후보)을 계약화한다. 단편상세_IMG(1920x1080) 캔버스 안에는 이름이 대소문자만 다른 두 그룹이 있다: 대문자 `LOGO`(타이틀+로고 블록, G.11이 4팩 표본으로 HOLD 처리 — y1=279 고정이나 w/h가 팩마다 제각각이라 높이 규칙 미확정)와 소문자 `logo`(채널 구독배지 블록, G.13 10표본+G.15 1표본=11표본으로 x0/y1 앵커가 일관됨). 이 계약은 소문자 `logo` 블록만 다룬다 — 대문자 `LOGO` 블록은 y1이 279로 이 계약의 y1(491~496)과 212px 이상 떨어져 있어 겹치지 않지만, 표본 부족으로 여전히 HOLD이며 이번 계약 범위 밖이다(G.11 문서 수정 없음, G.13도 동일 원칙 적용). 이 캔버스 패밀리(1920x1080 IMG + 600x240 LOGO)에 대한 첫 계약이며, 채널배지 슬롯 외 배경 콘텐츠·타이틀 블록은 의도적으로 범위 밖이다.",
+  "status": "draft",
+  "platforms": ["web"],
+  "tokens": {},
+  "props": {
+    "badge": {
+      "type": "enum",
+      "values": ["none", "present"],
+      "default": "none",
+      "required": false,
+      "tokenMapped": false,
+      "description": "채널 구독배지 표시 여부. 채널명/구독형태(sbs, kbs, 무제한즐기기, 약정할인 등)는 디자인 variant가 아니라 채널별 bespoke 콘텐츠(DAM 데이터)이므로 enum에 나열하지 않는다 — 이 계약은 위치(anchor)만 다룬다."
+    }
+  },
+  "composition": {
+    "slots": {
+      "badge": {
+        "description": "채널 로고 + 구독 안내 텍스트 복합 이미지. 좌하단(canvas-absolute) anchor로 배치, w/h 고정값 없음 — 채널마다 로고/텍스트 길이가 달라 가변. anchor rule 상세는 x-dam.anchorRule 참조.",
+        "children": {
+          "channel_badge": { "type": "image", "description": "채널 구독배지 (visible when badge='present')" }
+        }
+      }
+    }
+  },
+  "states": ["default"],
+  "variants": [
+    { "id": "none", "displayName": "배지 없음", "props": { "badge": "none" } },
+    { "id": "present", "displayName": "채널배지 표시", "props": { "badge": "present" } }
+  ],
+  "rendering": { "baseCanvas": { "width": 1920, "height": 1080 }, "outputFormats": ["jpg"] },
+  "x-dam": {
+    "uidRuleVersion": "uid-v1",
+    "damCombo": [
+      { "guide_id": "TBD", "canvas_w": 1920, "canvas_h": 1080 },
+      { "guide_id": "TBD", "canvas_w": 600, "canvas_h": 240 }
+    ],
+    "damComboNote": "g0_component_units.json에서 1920x1080 치수에 guide_id 27/28/29/30/31이 복수 매핑되어 있어 이 폴더(단편상세_IMG)가 정확히 어느 guide_id에 속하는지 특정할 근거가 없었다 — 임의로 하나를 고르지 않고 TBD로 명시(evidence gap, 별도 follow-up으로 이월).",
+    "sourceCohort": "GUX_단편상세_1920x1080_v1 (이 캔버스 패밀리의 첫 계약 — 배경/타이틀 블록은 미계약)",
+    "anchorRule": {
+      "type": "canvas-absolute",
+      "origin": "bottom-left",
+      "basis": "캔버스(1920x1080) 좌하단 기준 — 참조 로고 객체 없이 캔버스 좌표계에 직접 고정(gux-horizontal-poster-badge-slot의 logo-relative 앵커와는 다른 축).",
+      "x0": {
+        "range": [77, 82], "mean": 80.4, "unit": "px",
+        "sampleMeasurements": {
+          "G.13 (10건, 단편상세_IMG, 221222_채널홈)": [80, 81, 79, 80, 82, 82, 81, 81, 80, 81],
+          "G.15 (1건, 단편상세_IMG, 250205_무료아이콘)": [77]
+        },
+        "note": "11개 표본(G.13 단편상세_IMG 10 + G.15 단편상세_IMG 1) 전수 실측, x0 77~82px로 사실상 고정. G.13 verdict의 가로포스터_IMG(832x468) 표본(x0 39~41)은 별도 캔버스이므로 이 계약에 포함하지 않음 — 위 배열은 단편상세_IMG(1920x1080) 표본만."
+      },
+      "y1": {
+        "range": [491, 496], "mean": 493.8, "unit": "px",
+        "sampleMeasurements": {
+          "G.13 (10건)": [494, 494, 493, 493, 494, 494, 494, 496, 491, 493],
+          "G.15 (1건)": [496]
+        },
+        "basis": "캔버스 상단 기준 bottom edge y좌표(PSD bbox 관례). 11개 표본 전수 y1 491~496으로 수렴.",
+        "note": "width/height는 고정값 없음 — 채널 로고+구독 텍스트 길이에 따라 가변(G.13 실측 w 392~600px, h 65~171px). 호출자가 콘텐츠 기준으로 계산할 것, 하드코딩 금지."
+      }
+    },
+    "relatedHold": {
+      "contract": "none (HOLD 상태, 미계약)",
+      "note": "같은 캔버스(단편상세_IMG 1920x1080) 안의 대문자 `LOGO`(타이틀+로고 블록, y1=279 고정)는 G.11이 4팩 표본으로 HOLD 처리했다(w/h가 팩마다 제각각이라 높이 규칙 미확정). 이 블록의 y1(279)과 이 계약의 y1(491~496)은 212px 이상 떨어져 있어 겹치지 않으므로 co-occurrence 충돌은 없지만, G.11 자체는 이번 계약 범위 밖이며 여전히 HOLD다 — G.14 backlog(roi_rank 5~11)가 전량 스코핑 완료되어 추가 표본 소스가 없다. 참고: plans/dev-gux-folder-componentization/artifacts/verdict_g11.md."
+    },
+    "provenance": {
+      "steps": [
+        "plans/dev-gux-folder-componentization/artifacts/g13_channel_home_measurement.json",
+        "plans/dev-gux-folder-componentization/artifacts/verdict_g13.md",
+        "plans/dev-gux-folder-componentization/artifacts/g15_free_icon_measurement.json",
+        "plans/dev-gux-folder-componentization/artifacts/verdict_g15.md",
+        "plans/dev-gux-folder-componentization/artifacts/verdict_g11.md (relatedHold 교차참조용)"
+      ]
+    }
+  },
+  "usage": {
+    "do": [
+      "배지는 canvas-absolute bottom-left anchor로 계산할 것(x-dam.anchorRule.x0: 77~82px, y1: 491~496px)",
+      "w/h는 채널 콘텐츠(로고+구독 텍스트 길이) 기준으로 실측/계산할 것"
+    ],
+    "dont": [
+      "w/h를 고정값으로 하드코딩하지 말 것 — 채널마다 로고/텍스트 길이가 달라 가변",
+      "이 계약이 대문자 LOGO 타이틀 블록(y1=279, G.11 HOLD)까지 커버한다고 가정하지 말 것 — 별도 블록, 미계약 상태",
+      "damCombo.guide_id는 TBD이므로 DAM 쿼리에 임의 값을 채워넣지 말 것"
+    ]
+  },
+  "changelog": [
+    {
+      "version": "0.1.0", "date": "2026-08-16",
+      "changes": [
+        "G.13(10표본)+G.15(1표본) 실측 evidence를 단편상세_IMG 소문자 `logo` 채널배지 슬롯 계약으로 승격.",
+        "같은 캔버스의 대문자 `LOGO` 타이틀 블록(G.11 HOLD, y1=279)은 y범위가 겹치지 않아 계약 범위에서 명시적으로 제외 — x-dam.relatedHold 참조.",
+        "damCombo.guide_id는 g0_component_units.json에서 복수 후보(27~31)가 나와 특정 불가 — TBD로 명시, 임의 추정 금지.",
+        "anchorRule.type/origin을 canvas-absolute/bottom-left로 분리 — 기존 logo-relative 앵커와 별도 축, 향후 다른 canvas-absolute 앵커 확장 대비."
+      ]
+    }
+  ]
+}

@@ -1,10 +1,23 @@
 {
   "$schema": "../../schema/schema.json",
   "id": "gux-event-badge-icon",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "displayName": "GUX 이벤트 배지 아이콘",
   "status": "draft",
-  "tokens": {},
+  "tokens": {
+    "typography": {
+      "family": "210 옴니고딕, sans-serif",
+      "styleCode": "050",
+      "lineHeight.meta": "15.42px",
+      "lineHeight.3line": "19px",
+      "lineHeight.2line": "20px",
+      "lineHeight.single": "27px"
+    },
+    "color": {
+      "text.default": "#ffffff",
+      "text.emphasis": "#f50000"
+    }
+  },
   "props": {
     "badge_type": {
       "type": "enum",
