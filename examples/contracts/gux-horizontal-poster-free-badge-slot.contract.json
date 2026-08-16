@@ -1,0 +1,111 @@
+{
+  "$schema": "../../schema/schema.json",
+  "id": "gux-horizontal-poster-free-badge-slot",
+  "version": "0.1.0",
+  "displayName": "GUX 가로포스터 무료(free) 배지 슬롯 (832x468, 600x160 로고 소스)",
+  "description": "dev-gux-folder-componentization G.19가 230619_[GUX]가로포스터_TV오리지널_무료아이콘_KT전달 폴더에서 확보한 '무료' 배지 evidence를 계약화한다. gux-horizontal-poster-badge-slot(v0.1.0, UHD/수어)의 badge enum을 확장하지 않고 sibling 계약으로 분리했다 — 무료 배지의 anchor(offsetX 49~52px, LOGO 캔버스 y 102~138 고정)가 UHD/수어 anchor(offsetX 0~15px, y 120~162)와 구조적으로 다른 별도 클러스터이기 때문이다(gux-horizontal-poster-badge-slot 자신이 title_overlay에서 분리된 것과 동일한 논리). KT_GenieTV 운영가이드 v1.3(230616, 01_KT전달가이드)가 공식 근거. LOGO PSD 6개 sample 전수 실측 근거: plans/dev-gux-folder-componentization/artifacts/g19_free_badge_measurement.json.",
+  "status": "draft",
+  "platforms": ["web"],
+  "tokens": {},
+  "props": {
+    "badge": {
+      "type": "enum",
+      "values": ["none", "free"],
+      "default": "none",
+      "required": false,
+      "tokenMapped": false,
+      "description": "무료 콘텐츠 표시 배지. gux-horizontal-poster-badge-slot의 badge(none/uhd/sign)와는 별도 prop — 두 계약을 동시에 렌더링할 때의 좌표 겹침 여부는 evidence 없음(x-dam.coOccurrence 참조)."
+    }
+  },
+  "composition": {
+    "slots": {
+      "badge": {
+        "description": "무료 배지, title(로고 소스) 오른쪽 끝 기준 logo-relative anchor로 배치. poster absolute x는 title 텍스트 길이에 따라 가변. anchor rule 상세는 x-dam.anchorRule 참조.",
+        "children": {
+          "badge_free": {
+            "type": "image",
+            "description": "무료 배지 (visible when badge='free')"
+          }
+        }
+      }
+    }
+  },
+  "states": ["default"],
+  "variants": [
+    { "id": "none", "displayName": "배지 없음", "props": { "badge": "none" } },
+    { "id": "free", "displayName": "무료 배지", "props": { "badge": "free" } }
+  ],
+  "rendering": {
+    "baseCanvas": { "width": 832, "height": 468 },
+    "outputFormats": ["jpg"]
+  },
+  "x-dam": {
+    "uidRuleVersion": "uid-v1",
+    "damCombo": [
+      { "guide_id": 27, "canvas_w": 832, "canvas_h": 468 },
+      { "guide_id": 27, "canvas_w": 600, "canvas_h": 160 }
+    ],
+    "sourceCohort": "GUX_가로포스터_832x468_v1 (gux-horizontal-poster-title-overlay, gux-horizontal-poster-badge-slot과 동일 콤보)",
+    "badgeSizeEvidence": {
+      "w": [69, 69],
+      "h": [36, 36],
+      "note": "무료 배지 bbox 크기, 6개 표본 전부 정확히 69x36px로 완전 일치(오차 0px) — gux-horizontal-poster-badge-slot의 UHD/수어 pill(87~89x41~42px)과는 다른 크기."
+    },
+    "tokenEvidence": {
+      "note": "G.19 F2 실측은 bbox(위치/크기)만 추출했고 폰트/색상 등 텍스트 토큰 속성은 측정하지 않음 — F5(React 구현) 착수 전 원본 PSD 재열람으로 보강 필요(evidence gap, 임의 추정 금지)."
+    },
+    "anchorRule": {
+      "type": "logo-relative",
+      "basis": "title(로고 소스, 600x160 LOGO PSD의 title 텍스트) 오른쪽 끝을 기준으로 배치",
+      "offsetX": {
+        "range": [49, 52],
+        "mean": 50.5,
+        "unit": "px",
+        "sampleMeasurements": [50, 51, 51, 50, 52, 49],
+        "note": "6개 sample 전수 실측, 평균 50.5px 표준편차 ~1px로 매우 일관. gux-horizontal-poster-badge-slot의 UHD/수어 offsetX(0~15px)와는 별도 클러스터 — poster absolute x를 하드코딩하면 안 됨(title 텍스트 길이에 따라 가변)."
+      },
+      "positionY": {
+        "absolute": 120,
+        "range": [102, 138],
+        "basis": "LOGO 캔버스(600x160) 내부 y — 6개 표본 전부 [102,138]로 완전 고정, title 텍스트 자체의 y 위치(표본별 0~70 등 가변)와 무관하게 무료 배지 y는 항상 동일.",
+        "posterAbsoluteConversion": {
+          "range": [369, 405],
+          "basis": "gux-horizontal-poster-title-overlay.contract.json의 title_overlay slot bbox.y=267 기준 (267+102=369, 267+138=405) — badge-slot의 동일 변환 방식(y267+120=387, y267+162=429) 준용."
+        }
+      }
+    },
+    "coOccurrence": {
+      "status": "unverified",
+      "note": "gux-horizontal-poster-badge-slot(UHD/수어)과 이 계약(무료)이 같은 인스턴스에 동시 표시되는지 확인/반증하는 표본이 없다. poster 절대좌표 환산 시 y범위가 일부 겹치므로(무료 369~405, UHD/수어 387~429 — 18px 겹침) 두 계약을 함께 렌더링할 경우 좌표 겹침 여부를 별도로 검증해야 한다. 안전하다고 임의로 가정하지 말 것."
+    },
+    "provenance": {
+      "steps": [
+        "plans/dev-gux-folder-componentization/artifacts/g19_free_badge_measurement.json",
+        "plans/dev-gux-folder-componentization/artifacts/verdict_g19.md",
+        "01_KT전달가이드/KT_GenieTV_운영가이드 v1.3_230616_무료뱃지.pdf (원본 DAM 폴더 내 KT 공식 가이드 문서)"
+      ]
+    }
+  },
+  "usage": {
+    "do": [
+      "배지는 logo-relative anchor로 계산할 것(x-dam.anchorRule.offsetX: 49~52px, mean 50.5px)",
+      "poster absolute y는 title_overlay.bbox.y(267) 기준 x-dam.anchorRule.positionY.posterAbsoluteConversion(369~405) 사용"
+    ],
+    "dont": [
+      "poster absolute x/y를 고정값으로 하드코딩하지 말 것 — title 텍스트 길이에 따라 x가 가변",
+      "gux-horizontal-poster-badge-slot(UHD/수어)과 동시 렌더링 시 좌표 겹침 여부가 미검증 상태이니 임의로 안전하다고 가정하지 말 것(x-dam.coOccurrence 참조)"
+    ]
+  },
+  "changelog": [
+    {
+      "version": "0.1.0",
+      "date": "2026-08-16",
+      "changes": [
+        "G.19 스코핑 evidence(LOGO PSD 6 sample 전수 실측, KT_GenieTV 운영가이드 v1.3_230616 공식 근거)를 sibling 계약으로 승격.",
+        "gux-horizontal-poster-badge-slot의 badge enum을 확장하지 않고 별도 계약으로 분리 — offsetX(49~52px)/y(102~138, LOGO 캔버스 기준)가 UHD/수어(offsetX 0~15px, y 120~162)와 구조적으로 다른 클러스터.",
+        "badgeSizeEvidence 69x36px(6표본 완전 일치) 확인. tokenEvidence(폰트/색상)는 미측정 — F5 착수 전 보강 필요로 명시.",
+        "coOccurrence(UHD/sign과의 동시 표시 가능 여부)는 unverified로 명시 — 반증 아닌 미확인."
+      ]
+    }
+  ]
+}
